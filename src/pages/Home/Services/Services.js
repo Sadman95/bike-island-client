@@ -14,7 +14,7 @@ const Services = () => {
     }, [])
     return (
         <div id='services'>
-            <Container sx={{mt: -18, mb: 32}}>
+            <Container sx={{mt: -18}}>
             <Box>
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
   {services.map((service) => (

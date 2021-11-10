@@ -100,13 +100,13 @@ export default function PrimarySearchAppBar() {
           About Us
         </HashLink>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem>
         <HashLink
           style={{ color: "#1976D2", textDecoration: "none" }}
           smooth
-          to="/home#cycles"
+          to="/home#products"
         >
-          Cycles
+          Products
         </HashLink>
       </MenuItem>
       <MenuItem>
@@ -194,9 +194,9 @@ export default function PrimarySearchAppBar() {
               <HashLink
                 style={{ color: "white", textDecoration: "none" }}
                 smooth
-                to="/home#store"
+                to="/home#products"
               >
-                Store
+                Products
               </HashLink>
               <HashLink
                 style={{ color: "white", textDecoration: "none" }}
