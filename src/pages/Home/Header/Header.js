@@ -1,11 +1,10 @@
 import { Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
-import banner from '../../../images/header_banner/banner.jpg'
 
 
 const headerStyle = {
-    background: `url(${banner}) center no-repeat`,
+    background: "url('https://i.ibb.co/YyNRgm1/banner.jpg') center no-repeat",
     backgroundSize: 'cover',
     minHeight: '700px',
     backgroundColor: 'lightBlue',

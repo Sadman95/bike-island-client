@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { Link } from "react-router-dom";
+
 import { Avatar, Chip } from "@mui/material";
 import { HashLink } from "react-router-hash-link";
 
@@ -75,49 +75,57 @@ export default function PrimarySearchAppBar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <Link
+        <HashLink
           style={{ color: "#1976D2", textDecoration: "none" }}
-          as={HashLink}
+          smooth
           to="/home#home"
         >
           Home
-        </Link>
+        </HashLink>
       </MenuItem>
       <MenuItem>
-        <Link
+        <HashLink
           style={{ color: "#1976D2", textDecoration: "none" }}
-          as={HashLink}
+          smooth
+          to="/home#services"
+        >Services
+        </HashLink>
+      </MenuItem>
+      <MenuItem>
+        <HashLink
+          style={{ color: "#1976D2", textDecoration: "none" }}
+          smooth
           to="/home#about"
         >
           About Us
-        </Link>
+        </HashLink>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
-        <Link
+        <HashLink
           style={{ color: "#1976D2", textDecoration: "none" }}
-          as={HashLink}
+          smooth
           to="/home#cycles"
         >
           Cycles
-        </Link>
+        </HashLink>
       </MenuItem>
       <MenuItem>
-        <Link
+        <HashLink
           style={{ color: "#1976D2", textDecoration: "none" }}
-          as={HashLink}
+          smooth
           to="/home#reviews"
         >
           Reviews
-        </Link>
+        </HashLink>
       </MenuItem>
       <MenuItem>
-        <Link
+        <HashLink
           style={{ color: "#1976D2", textDecoration: "none" }}
-          as={HashLink}
+          smooth
           to="/home#contact"
         >
           Contact
-        </Link>
+        </HashLink>
       </MenuItem>
       <IconButton
         size="large"
@@ -162,41 +170,48 @@ export default function PrimarySearchAppBar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-              <Link
+              <HashLink
                 style={{ color: "white", textDecoration: "none" }}
-                as={HashLink}
+                smooth
                 to="/home#home"
               >
                 Home
-              </Link>
-              <Link
+              </HashLink>
+              <HashLink
                 style={{ color: "white", textDecoration: "none" }}
-                as={HashLink}
+                to="/home#services"
+                smooth
+              >
+                Services
+              </HashLink>
+              <HashLink
+                style={{ color: "white", textDecoration: "none" }}
+                smooth
                 to="/home#about"
               >
                 About Us
-              </Link>
-              <Link
+              </HashLink>
+              <HashLink
                 style={{ color: "white", textDecoration: "none" }}
-                as={HashLink}
+                smooth
                 to="/home#store"
               >
                 Store
-              </Link>
-              <Link
+              </HashLink>
+              <HashLink
                 style={{ color: "white", textDecoration: "none" }}
-                as={HashLink}
+                smooth
                 to="/home#reviews"
               >
                 Reviews
-              </Link>
-              <Link
+              </HashLink>
+              <HashLink
                 style={{ color: "white", textDecoration: "none" }}
-                as={HashLink}
+                smooth
                 to="/home#contact"
               >
                 Contact
-              </Link>
+              </HashLink>
             </Box>
 
             <IconButton
