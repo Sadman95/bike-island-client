@@ -139,7 +139,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="fixed" color='transparent'>
         <Toolbar>
           <img
             width="100px"
@@ -148,7 +148,10 @@ export default function PrimarySearchAppBar() {
           />
 
           <Typography
-            variant="h6"
+          color='white'
+          fontFamily='Poppins'
+            variant="h4"
+            fontWeight='bold'
             noWrap
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
@@ -176,9 +179,9 @@ export default function PrimarySearchAppBar() {
               <Link
                 style={{ color: "white", textDecoration: "none" }}
                 as={HashLink}
-                to="/home#cycles"
+                to="/home#store"
               >
-                Cycles
+                Store
               </Link>
               <Link
                 style={{ color: "white", textDecoration: "none" }}

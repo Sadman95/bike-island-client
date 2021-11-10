@@ -6,7 +6,7 @@ import './index.css'
 
 function App() {
   return (
-    <div>
+    <div className='App'>
       <Router>
         <Navigation></Navigation>
         <Switch>
