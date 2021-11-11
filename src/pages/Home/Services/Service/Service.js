@@ -17,7 +17,7 @@ const Service = ({service}) => {
 
     return (
         <Grid item xs={4} sm={4} md={4}>
-      <Paper sx={paperBg} elevation={6}>
+      <Paper sx={paperBg}>
           <Typography fontWeight='medium' variant='h4' component='div'>
               {serviceTitle}
           </Typography>

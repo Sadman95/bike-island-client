@@ -8,18 +8,19 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
 
-import { Avatar, Chip } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import { HashLink } from "react-router-hash-link";
 import { Link } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth/useAuth";
 
 export default function PrimarySearchAppBar() {
+  const { user, logOut } = useAuth();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -36,6 +37,12 @@ export default function PrimarySearchAppBar() {
 
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
+  };
+
+  /* log out */
+  const handleLogOut = () => {
+    logOut();
+    handleMenuClose();
   };
 
   const menuId = "primary-search-account-menu";
@@ -55,8 +62,9 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My Orders</MenuItem>
+      <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
     </Menu>
   );
 
@@ -91,7 +99,8 @@ export default function PrimarySearchAppBar() {
           style={{ color: "#1976D2", textDecoration: "none" }}
           smooth
           to="/home#services"
-        >Services
+        >
+          Services
         </HashLink>
       </MenuItem>
       <MenuItem>
@@ -130,27 +139,31 @@ export default function PrimarySearchAppBar() {
           Contact
         </HashLink>
       </MenuItem>
-      <IconButton
-        size="large"
-        edge="end"
-        aria-label="account of current user"
-        aria-controls={menuId}
-        aria-haspopup="true"
-        onClick={handleProfileMenuOpen}
-        color="inherit"
-      >
-        <Chip
-          avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />}
-          label="Avatar"
-          variant="outlined"
-        />
-      </IconButton>
+      {user.email ? (
+        <IconButton
+          size="large"
+          edge="end"
+          aria-label="account of current user"
+          aria-controls={menuId}
+          aria-haspopup="true"
+          onClick={handleProfileMenuOpen}
+          color="inherit"
+        >
+          <Chip label={user.displayName} variant="outlined" />
+        </IconButton>
+      ) : (
+        <Link style={{ textDecoration: "none" }} to="/login">
+          <Button variant="contained" color="secondary">
+            Log In
+          </Button>
+        </Link>
+      )}
     </Menu>
   );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar sx={{zIndex: 999}} position="fixed">
+      <AppBar sx={{ zIndex: 999 }} position="fixed">
         <Toolbar>
           <img
             width="100px"
@@ -159,10 +172,10 @@ export default function PrimarySearchAppBar() {
           />
 
           <Typography
-          color='white'
-          fontFamily='Poppins'
+            color="white"
+            fontFamily="Poppins"
             variant="h4"
-            fontWeight='bold'
+            fontWeight="bold"
             noWrap
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
@@ -215,28 +228,28 @@ export default function PrimarySearchAppBar() {
               >
                 Contact
               </HashLink>
-              <Link to='/addProduct'>
-                Add Product
-              </Link>
+              <Link to="/addProduct">Add Product</Link>
             </Box>
 
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <Chip
-                avatar={
-                  <Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />
-                }
-                label="Avatar"
-                variant="outlined"
-              />
-            </IconButton>
+            {user.email ? (
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <Chip label={user.displayName} variant="outlined" />
+              </IconButton>
+            ) : (
+              <Link style={{ textDecoration: "none" }} to="/login">
+                <Button variant="contained" color="secondary">
+                  Log In
+                </Button>
+              </Link>
+            )}
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton

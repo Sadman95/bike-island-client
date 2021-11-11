@@ -18,7 +18,7 @@ const Product = ({ product }) => {
 
   return (
     <Grid item xs={4} sm={4} md={4}>
-      <Card className='product' elevation='0' sx={{ maxWidth: 345, textAlign: 'center', py: 2 }}>
+      <Card className='product' sx={{boxShadow: 0, maxWidth: 345, textAlign: 'center', py: 2 }}>
           <CardMedia
             component="img"
             height="280"

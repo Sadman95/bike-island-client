@@ -1,0 +1,105 @@
+import { Container, Grid, Typography } from "@mui/material";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Link, useHistory } from "react-router-dom";
+import useAuth from "../../../src/hooks/useAuth/useAuth";
+
+const Register = () => {
+  const history = useHistory();
+  const { registerUser, authError } = useAuth();
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    const { name, email, password } = data;
+    registerUser(name, email, password);
+    history.replace("/home");
+    reset();
+  };
+
+  return (
+    <Container sx={{ mt: 24 }}>
+      <Grid
+        container
+        spacing={{ xs: 2, md: 3 }}
+        columns={{ xs: 2, sm: 4, md: 12 }}
+      >
+        <Grid item xs={2} sm={4} md={6}>
+          <Typography color="indianred" variant="h6" component="div">
+            Register
+          </Typography>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <label htmlFor="name">Name</label>
+            <br />
+            <input
+              style={{ marginBottom: "16px" }}
+              id="name"
+              type="text"
+              placeholder="Your Name"
+              {...register("name", { minLength: 3, maxLength: 20 })}
+            />
+            <br />
+            <Typography color="red">
+              {errors.name?.type === "minLength" && "Can't be taken"}
+              {errors.name?.type === "maxLength" && "Can't be taken"}
+            </Typography>
+
+            <br />
+            <label htmlFor="email">Email</label>
+            <br />
+            <input
+              style={{ marginBottom: "10px" }}
+              id="email"
+              type="email"
+              placeholder="Your Email"
+              {...register("email", { required: true })}
+            />
+            <br />
+            <Typography color="red">
+              {errors.email?.type === "required" && "Email is required"}
+            </Typography>
+
+            <br />
+            <label htmlFor="password">Password</label>
+            <br />
+            <input
+              style={{ marginBottom: "10px" }}
+              id="password"
+              type="password"
+              placeholder="Password"
+              {...register("password", {
+                required: true,
+                pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/,
+              })}
+            />
+            <br />
+            <Typography color="red">
+              {authError}
+              {errors.password?.type === "pattern" &&
+                "Password must be more than 6 characters containing at least one letter and one number"}
+            </Typography>
+            <br />
+
+            <input
+              style={{ marginBottom: "10px" }}
+              type="submit"
+              value="Sign Up"
+            />
+            <Typography variant="subtitle1" component="div">
+              Already Having An Account? Please <Link to="/login">Log In</Link>
+            </Typography>
+          </form>
+        </Grid>
+        <Grid item xs={2} sm={4} md={6}>
+          <img src="https://i.ibb.co/JCfBY5y/form.png" alt="img" />
+        </Grid>
+      </Grid>
+    </Container>
+  );
+};
+
+export default Register;
