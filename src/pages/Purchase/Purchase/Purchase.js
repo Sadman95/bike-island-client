@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Grid, Typography, Button } from "@mui/material";
+import PlaceOrderModal from "../../PlaceOrder/PlaceOrderModal/PlaceOrderModal";
 
 const Purchase = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({});
-  console.log(product);
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     fetch(`http://localhost:5000/cycles/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data));
-  }, []);
+  }, [id]);
   return (
     <Container sx={{ mt: 24 }}>
       <Grid
@@ -33,7 +37,8 @@ const Purchase = () => {
             <Typography variant='h3' component='div' fontWeight='bold'>
                 ${product.productPrice}
             </Typography>
-            <Button variant='contained' color='error'>Place Order</Button>
+            <Button onClick={handleOpen} variant='contained' color='error'>Place Order</Button>
+            <PlaceOrderModal product={product} open={open} handleClose={handleClose}></PlaceOrderModal>
         </Grid>
       </Grid>
     </Container>

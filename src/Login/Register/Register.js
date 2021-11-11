@@ -8,6 +8,8 @@ const Register = () => {
   const history = useHistory();
   const { registerUser, authError } = useAuth();
 
+
+
   const {
     register,
     handleSubmit,
@@ -20,6 +22,8 @@ const Register = () => {
     history.replace("/home");
     reset();
   };
+
+
 
   return (
     <Container sx={{ mt: 24 }}>

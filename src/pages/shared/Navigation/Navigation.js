@@ -161,6 +161,8 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
+    
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar sx={{ zIndex: 999 }} position="fixed">

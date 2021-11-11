@@ -21,9 +21,10 @@ const useFirebase = () => {
   const registerUser = (name, email, password) => {
     setIsLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
+      .then((result) => {
+        const user = result.user;
         updateUser(name);
+        saveUser(name, email);
         setUser(user);
       })
       .catch((error) => {
@@ -34,6 +35,19 @@ const useFirebase = () => {
       });
     setAuthError("");
   };
+
+  /* save user to DB */
+   const saveUser = (name, email) =>{
+      const user = {name: name, email: email};
+      fetch('http://localhost:5000/users', {
+          method: 'POST',
+          headers: {
+              'content-type': 'application/json'
+          },
+          body: JSON.stringify(user),
+      })
+      .then(res => console.log(res))
+  } 
 
   /* update user */
   const updateUser = (name) => {
