@@ -3,6 +3,8 @@ import Home from '../src/pages/Home/Home/Home';
 import Navigation from '../src/pages/shared/Navigation/Navigation';
 import './App.css';
 import './index.css'
+import AddProduct from './pages/Admin/AddProduct/AddProduct';
+import AllProducts from './pages/AllProducts/AllProducts';
 
 function App() {
   return (
@@ -15,6 +17,12 @@ function App() {
           </Route>
           <Route exact path='/home'>
             <Home></Home>
+          </Route>
+          <Route exact path='/allProducts'>
+            <AllProducts></AllProducts>
+          </Route>
+          <Route exact path='/addProduct'>
+            <AddProduct></AddProduct>
           </Route>
         </Switch>
       </Router>

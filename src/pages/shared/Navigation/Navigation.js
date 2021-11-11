@@ -10,6 +10,7 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 
 import { Avatar, Chip } from "@mui/material";
 import { HashLink } from "react-router-hash-link";
+import { Link } from "react-router-dom";
 
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -17,6 +18,8 @@ export default function PrimarySearchAppBar() {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -147,7 +150,7 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" color='transparent'>
+      <AppBar sx={{zIndex: 999}} position="fixed">
         <Toolbar>
           <img
             width="100px"
@@ -212,6 +215,9 @@ export default function PrimarySearchAppBar() {
               >
                 Contact
               </HashLink>
+              <Link to='/addProduct'>
+                Add Product
+              </Link>
             </Box>
 
             <IconButton

@@ -1,6 +1,7 @@
 import { Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 
 const headerStyle = {
@@ -19,14 +20,21 @@ const headerContent = {
     textAlign: 'center'
 }
 
+
 const Header = () => {
+    const history = useHistory();
+
+    const goToStore = () =>{
+        history.push('/allProducts');
+    }
+
     return (
         <Box sx={headerStyle}>
             <Box sx={headerContent}>
             <Typography sx={{mb: 4}} color='white' variant='h2' fontWeight='bold' component='div'>
                 Ride a Bike or Buy a Bike?
             </Typography>
-            <Button variant='contained' color='warning'>
+            <Button onClick={goToStore} variant='contained' color='warning'>
                 Bike Store
             </Button>
             </Box>
