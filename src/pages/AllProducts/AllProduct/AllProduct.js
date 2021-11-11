@@ -7,13 +7,15 @@ import {
     Typography,
   } from "@mui/material";
   import React from "react";
+import { useHistory } from "react-router-dom";
   import '../../Home/Products/Product/Product.css'
 
 const AllProduct = ({product}) => {
-    const { productImg, productTitle, productDesc, productPrice } = product;
+  const history = useHistory();
+    const { _id, productImg, productTitle, productDesc, productPrice } = product;
 
-    const handlePurchase = () => {
-        console.log("purchase clicked");
+    const handlePurchase = (id) => {
+        history.push(`/cycles/${id}`);
       };
 
     return (
@@ -37,7 +39,7 @@ const AllProduct = ({product}) => {
             </Typography>
           </CardContent>
           
-        <Button onClick={handlePurchase} variant="contained" color="primary">
+        <Button onClick={()=>handlePurchase(_id)} variant="contained" color="primary">
             Purchase
           </Button>
       </Card>

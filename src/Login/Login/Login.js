@@ -3,9 +3,14 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth/useAuth";
+import {useHistory, useLocation} from 'react-router-dom';
+
 
 const LogIn = () => {
   const { logInUser, authError, user } = useAuth();
+  const history = useHistory();
+  const location = useLocation();
+  const redirect_uri = location.state?.from || '/login';
 
   const {
     register,
@@ -16,6 +21,7 @@ const LogIn = () => {
   const onSubmit = (data) => {
     const { email, password } = data;
     logInUser(email, password);
+    history.push(redirect_uri);
     reset();
   };
 

@@ -8,6 +8,8 @@ import LogIn from './Login/Login/Login';
 import Register from './Login/Register/Register';
 import AddProduct from './pages/Admin/AddProduct/AddProduct';
 import AllProducts from './pages/AllProducts/AllProducts';
+import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
+import Purchase from './pages/Purchase/Purchase/Purchase';
 import Footer from './pages/shared/Footer/Footer';
 
 function App() {
@@ -35,6 +37,9 @@ function App() {
           <Route exact path='/addProduct'>
             <AddProduct></AddProduct>
           </Route>
+          <PrivateRoute exact path='/cycles/:id'>
+            <Purchase></Purchase>
+          </PrivateRoute>
         </Switch>
         <Footer></Footer>
       </Router>

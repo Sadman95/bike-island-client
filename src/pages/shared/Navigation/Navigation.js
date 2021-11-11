@@ -241,7 +241,7 @@ export default function PrimarySearchAppBar() {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <Chip label={user.displayName} variant="outlined" />
+                <Chip label={user.displayName} variant="outlined" color='default' />
               </IconButton>
             ) : (
               <Link style={{ textDecoration: "none" }} to="/login">
