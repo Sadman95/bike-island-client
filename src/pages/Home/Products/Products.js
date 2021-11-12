@@ -13,7 +13,8 @@ const Products = () => {
         .then(data => setProducts(data))
     }, [])
   return (
-    <Container sx={{mt: 28}}>
+    <div id='products'>
+      <Container sx={{mt: 28}}>
         <Typography fontWeight='bold' textAlign='center' variant='h4' component='div'>Products</Typography>
       <Grid
         container
@@ -25,6 +26,7 @@ const Products = () => {
         ))}
       </Grid>
     </Container>
+    </div>
   );
 };
 

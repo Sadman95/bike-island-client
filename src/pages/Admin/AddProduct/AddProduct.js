@@ -19,7 +19,7 @@ const AddProduct = () => {
         reset()
     };
     return (
-        <Box sx={{mt: 24, textAlign: 'center'}}>
+        <Box sx={{mt: 8, textAlign: 'center'}}>
             <Typography color='primary' variant='h4' component='div'>
                 Add A Product
             </Typography>

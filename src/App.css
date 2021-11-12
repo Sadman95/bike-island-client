@@ -4,6 +4,9 @@ a{
   text-decoration: none;
 }
 
+.MuiBackdrop-root{
+  background-color: rgba(70, 70, 70, 0.13) !important;
+}
 
 
 .App-logo {

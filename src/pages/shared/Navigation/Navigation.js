@@ -159,7 +159,7 @@ export default function PrimarySearchAppBar() {
         </IconButton>
       ) : (
         <Link style={{ textDecoration: "none" }} to="/login">
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="primary">
             Log In
           </Button>
         </Link>
@@ -252,8 +252,8 @@ export default function PrimarySearchAppBar() {
                 <Chip label={user.displayName} variant="outlined" color='default' />
               </IconButton>
             ) : (
-              <Link style={{ textDecoration: "none" }} to="/login">
-                <Button variant="contained" color="secondary">
+              <Link style={{ textDecoration: "none",marginLeft: '5px' }} to="/login">
+                <Button variant="contained" color="info">
                   Log In
                 </Button>
               </Link>

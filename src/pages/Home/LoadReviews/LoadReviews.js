@@ -11,7 +11,8 @@ const LoadReviews = () => {
       .then((data) => setReviews(data));
   }, []);
   return (
-    <Container sx={{mt: 24}}>
+    <div id='reviews'>
+      <Container sx={{mt: 24}}>
       <Typography sx={{mb: 2}} variant="h4" fontWeight="bold" component="div">
         Reviews
       </Typography>
@@ -25,6 +26,7 @@ const LoadReviews = () => {
         ))}
       </Grid>
     </Container>
+    </div>
   );
 };
 

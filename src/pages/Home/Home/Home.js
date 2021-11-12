@@ -7,6 +7,7 @@ import Services from '../Services/Services';
 import Navigation from '../../shared/Navigation/Navigation'
 import Footer from '../../shared/Footer/Footer';
 import LoadReviews from '../LoadReviews/LoadReviews';
+import Contact from '../Contact/Contact';
 
 const Home = () => {
     const {isLoading} = useAuth();
@@ -25,6 +26,7 @@ const Home = () => {
             <About></About>
             <Products></Products>
             <LoadReviews></LoadReviews>
+            <Contact></Contact>
             <Footer></Footer>
         </div>
     );

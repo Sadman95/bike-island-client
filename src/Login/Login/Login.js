@@ -4,13 +4,14 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth/useAuth";
 import {useHistory, useLocation} from 'react-router-dom';
+import Navigation from '../../pages/shared/Navigation/Navigation'
 
 
 const LogIn = () => {
   const { logInUser, authError, user } = useAuth();
   const history = useHistory();
   const location = useLocation();
-  const redirect_uri = location.state?.from || '/home';
+  const redirect_uri = location.state?.from || '/login';
 
   const {
     register,
@@ -26,7 +27,12 @@ const LogIn = () => {
   };
 
   return (
-    <Container sx={{ mt: 24 }}>
+    <>
+    {
+      user.email && <Navigation></Navigation>
+    }
+
+<Container sx={{ mt: 24 }}>
       <Grid
         sx={{ display: "flex", alignItems: "center" }}
         container
@@ -86,6 +92,7 @@ const LogIn = () => {
         </Grid>
       </Grid>
     </Container>
+    </>
   );
 };
 

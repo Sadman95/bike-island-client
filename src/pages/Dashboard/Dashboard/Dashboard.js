@@ -17,6 +17,11 @@ import { Button } from '@mui/material';
 import {useHistory, useRouteMatch} from 'react-router-dom'
 import UserOrders from '../UserOrders/UserOrders';
 import Payment from '../../Dashboard/Payment/Payments'
+import Review from '../Review/Review';
+import MakeAdmin from '../MakeAdmin/MakeAdmin';
+import AllOrders from '../AllOrders/AllOrders';
+import AddProduct from '../../Admin/AddProduct/AddProduct';
+import ManageProducts from '../ManageProducts/ManageProducts';
 
 const drawerWidth = 250;
 
@@ -52,30 +57,35 @@ function Dashboard(props) {
           {
               admin && <>
                 <ListItem>
-          <Link to="/makeAdmin">Make Admin</Link>
+          <Link to={`${url}/makeAdmin`}>Make Admin</Link>
           </ListItem>
           <ListItem>
-          <Link to="/manageOrders">Manage All Orders</Link>
+          <Link to={`${url}/allOrders`}>Manage All Orders</Link>
           </ListItem>
           <ListItem>
-          <Link to="/addProduct">Add Product</Link>
+          <Link to={`${url}/addProduct`}>Add Product</Link>
           </ListItem> 
           <ListItem>
-          <Link to="/manageProduct">Manage Product</Link>
+          <Link to={`${url}/manageProducts`}>Manage Products</Link>
           </ListItem> 
               </>
           }
-          <ListItem>
+          {
+              !admin && <>
+                <ListItem>
             <Link to={`${url}`}>My Orders</Link>
           </ListItem>
           <ListItem>
-            <Link to='/payment'>Payment</Link>
+            <Link to={`${url}/payment`}>Payment</Link>
           </ListItem>
           <ListItem>
-            <Link to='/review'>Review</Link>
+            <Link to={`${url}/review`}>Review</Link>
           </ListItem>
+          
+              </>
+          }
           <ListItem>
-            <Button onClick={userLogOut} variant='contained' color='error'>
+            <Button onClick={userLogOut} variant='contained' color='warning'>
                 Log Out
             </Button>
           </ListItem>
@@ -107,7 +117,7 @@ function Dashboard(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Dashboard
+            {admin ? 'Admin' : user.displayName}'s Dashboard
           </Typography>
         </Toolbar>
       </AppBar>
@@ -154,8 +164,23 @@ function Dashboard(props) {
         <Route exact path={`${path}`}>
           <UserOrders></UserOrders>
         </Route>
-        <Route path={`${path}/payment`}>
+        <Route  path={`${path}/payment`}>
           <Payment></Payment>
+        </Route>
+        <Route  path={`${path}/review`}>
+        <Review></Review>
+        </Route>
+        <Route  path={`${path}/makeAdmin`}>
+          <MakeAdmin></MakeAdmin>
+        </Route>
+        <Route path={`${path}/allOrders`}>
+          <AllOrders></AllOrders>
+        </Route>
+        <Route  path={`${path}/addProduct`}>
+          <AddProduct></AddProduct>
+        </Route>
+        <Route  path={`${path}/manageProducts`}>
+          <ManageProducts></ManageProducts>
         </Route>
       </Switch>
         
