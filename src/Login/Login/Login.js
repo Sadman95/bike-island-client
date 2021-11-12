@@ -10,7 +10,7 @@ const LogIn = () => {
   const { logInUser, authError, user } = useAuth();
   const history = useHistory();
   const location = useLocation();
-  const redirect_uri = location.state?.from || '/login';
+  const redirect_uri = location.state?.from || '/home';
 
   const {
     register,
@@ -41,7 +41,7 @@ const LogIn = () => {
             <label htmlFor="email">Email</label>
             <br />
             <input
-              style={{ marginBottom: "16px" }}
+              style={{ marginBottom: "16px", display: 'block', width: '80%', padding: '2px 4px' }}
               id="email"
               type="email"
               placeholder="Your Email"
@@ -52,7 +52,7 @@ const LogIn = () => {
             <label htmlFor="password">Password</label>
             <br />
             <input
-              style={{ marginBottom: "16px" }}
+              style={{ marginBottom: "16px", display: 'block', width: '80%' ,padding: '2px 4px' }}
               id="password"
               type="password"
               placeholder="Password"
@@ -77,7 +77,7 @@ const LogIn = () => {
             <input type="submit" value="Log In" />
 
             <Typography variant="subtitle1" component="div">
-              Not Having An Account? Please <Link to="/register">Register</Link>
+              Not Having An Account? Please <Link style={{textDecoration: 'underline'}} to="/register">Register</Link>
             </Typography>
           </form>
         </Grid>

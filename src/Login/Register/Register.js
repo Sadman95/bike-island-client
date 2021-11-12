@@ -40,7 +40,7 @@ const Register = () => {
             <label htmlFor="name">Name</label>
             <br />
             <input
-              style={{ marginBottom: "16px" }}
+              style={{ marginBottom: '4px', display: 'block', width: '80%' ,padding: '2px 4px' }}
               id="name"
               type="text"
               placeholder="Your Name"
@@ -56,7 +56,7 @@ const Register = () => {
             <label htmlFor="email">Email</label>
             <br />
             <input
-              style={{ marginBottom: "10px" }}
+              style={{ marginBottom: '4px', display: 'block', width: '80%' ,padding: '2px 4px' }}
               id="email"
               type="email"
               placeholder="Your Email"
@@ -71,7 +71,7 @@ const Register = () => {
             <label htmlFor="password">Password</label>
             <br />
             <input
-              style={{ marginBottom: "10px" }}
+              style={{ marginBottom: '4px', display: 'block', width: '80%' ,padding: '2px 4px' }}
               id="password"
               type="password"
               placeholder="Password"
@@ -94,7 +94,7 @@ const Register = () => {
               value="Sign Up"
             />
             <Typography variant="subtitle1" component="div">
-              Already Having An Account? Please <Link to="/login">Log In</Link>
+              Already Having An Account? Please <Link style={{textDecoration: 'underline'}} to="/login">Log In</Link>
             </Typography>
           </form>
         </Grid>

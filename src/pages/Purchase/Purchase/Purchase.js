@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Grid, Typography, Button } from "@mui/material";
 import PlaceOrderModal from "../../PlaceOrder/PlaceOrderModal/PlaceOrderModal";
+import  Navigation from '../../shared/Navigation/Navigation'
 
 const Purchase = () => {
   const { id } = useParams();
@@ -17,6 +18,8 @@ const Purchase = () => {
       .then((data) => setProduct(data));
   }, [id]);
   return (
+    <>
+    <Navigation></Navigation>
     <Container sx={{ mt: 24 }}>
       <Grid
        sx={{display: 'flex', alignItems: 'center'}}
@@ -42,6 +45,7 @@ const Purchase = () => {
         </Grid>
       </Grid>
     </Container>
+    </>
   );
 };
 

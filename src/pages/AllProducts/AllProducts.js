@@ -1,6 +1,8 @@
 import { Container, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AllProduct from './AllProduct/AllProduct';
+import Navigation from '../../../src/pages/shared/Navigation/Navigation'
+import Footer from "../shared/Footer/Footer";
 
 const AllProducts = () => {
     const [products, setProducts] = useState([]);
@@ -11,7 +13,9 @@ const AllProducts = () => {
         .then(data => setProducts(data))
     }, [])
     return (
-        <Container sx={{mt: 28}}>
+        <>
+          <Navigation></Navigation>
+          <Container sx={{mt: 28}}>
         <Typography fontWeight='bold' textAlign='center' variant='h4' component='div'>Explore All Products</Typography>
       <Grid
         container
@@ -23,6 +27,8 @@ const AllProducts = () => {
         ))}
       </Grid>
     </Container>
+    <Footer></Footer>
+        </>
     );
 };
 

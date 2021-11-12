@@ -4,6 +4,9 @@ import About from '../About/About';
 import Header from '../Header/Header';
 import Products from '../Products/Products';
 import Services from '../Services/Services';
+import Navigation from '../../shared/Navigation/Navigation'
+import Footer from '../../shared/Footer/Footer';
+import LoadReviews from '../LoadReviews/LoadReviews';
 
 const Home = () => {
     const {isLoading} = useAuth();
@@ -16,10 +19,13 @@ const Home = () => {
     
     return (
         <div id='home'>
+            <Navigation></Navigation>
             <Header></Header>
             <Services></Services>
             <About></About>
             <Products></Products>
+            <LoadReviews></LoadReviews>
+            <Footer></Footer>
         </div>
     );
 };

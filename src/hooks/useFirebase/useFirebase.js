@@ -8,12 +8,14 @@ import {
   updateProfile,
   onAuthStateChanged,
 } from "firebase/auth";
+import swal from "sweetalert";
 initAuthentication();
 
 const useFirebase = () => {
   const [user, setUser] = useState({});
   const [authError, setAuthError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [admin, setAdmin] = useState(false);
 
   const auth = getAuth();
 
@@ -46,7 +48,12 @@ const useFirebase = () => {
           },
           body: JSON.stringify(user),
       })
-      .then(res => console.log(res))
+      .then(res => res.json())
+      .then(data => {
+        if(data.insertedId){
+          swal("Great!", "You are saved successfully!", "success");
+        }
+      })
   } 
 
   /* update user */
@@ -109,10 +116,19 @@ const useFirebase = () => {
     return () => unsubscribe;
   }, [auth]);
 
+
+  /* admin accessibility */
+  useEffect(() =>{
+    fetch(`http://localhost:5000/users/${user.email}`)
+    .then(res => res.json())
+    .then(data => setAdmin(data.admin))
+  }, [user.email])
+
   return {
     user,
     authError,
     isLoading,
+    admin,
     registerUser,
     logInUser,
     logOut,

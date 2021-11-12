@@ -27,11 +27,12 @@ const PlaceOrderModal = ({product, open, handleClose}) => {
 
     const {user} = useAuth();
 
-    const {_id, productTitle, productPrice} = product;
+    const { productTitle, productPrice, productImg} = product;
 
     const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = data => {
-      data.productId = _id;
+      data.image = productImg;
+      data.title = productTitle;
       data.price = productPrice;
       
       fetch('http://localhost:5000/orders', {

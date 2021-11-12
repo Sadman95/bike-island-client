@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MoreIcon from "@mui/icons-material/MoreVert";
-
+import {useHistory} from 'react-router-dom';
 import { Button, Chip } from "@mui/material";
 import { HashLink } from "react-router-hash-link";
 import { Link } from "react-router-dom";
@@ -15,6 +15,7 @@ import useAuth from "../../../hooks/useAuth/useAuth";
 
 export default function PrimarySearchAppBar() {
   const { user, logOut } = useAuth();
+  const history = useHistory();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -45,6 +46,12 @@ export default function PrimarySearchAppBar() {
     handleMenuClose();
   };
 
+  /* dashboard open */
+  const handleDashboard = ()=>{
+    history.replace('/dashboard');
+    handleMenuClose();
+  }
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -62,8 +69,7 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My Orders</MenuItem>
+      <MenuItem onClick={handleDashboard}>Dashboard</MenuItem>
       <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
     </Menu>
   );
@@ -230,7 +236,7 @@ export default function PrimarySearchAppBar() {
               >
                 Contact
               </HashLink>
-              <Link to="/addProduct">Add Product</Link>
+              
             </Box>
 
             {user.email ? (
