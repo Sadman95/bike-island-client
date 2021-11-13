@@ -12,7 +12,7 @@ const MakeAdmin = () => {
 
   const onSubmit = data => {
       data.requester = user.email;
-      fetch('http://localhost:5000/users', {
+      fetch('https://polar-bastion-89865.herokuapp.com/users', {
           method: 'PUT',
           headers: {
               'content-type': 'application/json'

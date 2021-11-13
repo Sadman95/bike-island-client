@@ -13,7 +13,7 @@ const Purchase = () => {
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/cycles/${id}`)
+    fetch(`https://polar-bastion-89865.herokuapp.com/cycles/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data));
   }, [id]);

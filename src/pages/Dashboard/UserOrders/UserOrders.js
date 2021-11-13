@@ -18,7 +18,7 @@ const UserOrders = () => {
   const [remove, setRemove] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/orders?email=${user.email}`)
+    fetch(`https://polar-bastion-89865.herokuapp.com/orders?email=${user.email}`)
       .then((res) => res.json())
       .then((data) => setMyOrders(data));
   }, [user.email]);
@@ -27,7 +27,7 @@ const UserOrders = () => {
 
   /* delete order */
   const deleteOrder = (id) => {
-    fetch(`http://localhost:5000/orders/${id}`, {
+    fetch(`https://polar-bastion-89865.herokuapp.com/orders/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())

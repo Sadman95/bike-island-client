@@ -19,7 +19,7 @@ const SingleReview = ({order}) => {
         data.userName = user.displayName;
         data.imgUrl = image;
         data.title = title;
-        fetch('http://localhost:5000/reviews', {
+        fetch('https://polar-bastion-89865.herokuapp.com/reviews', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

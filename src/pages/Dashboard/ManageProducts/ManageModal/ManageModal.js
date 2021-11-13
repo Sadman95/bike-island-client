@@ -21,7 +21,7 @@ const style = {
 const ManageModal = ({ id, open, handleClose }) => {
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
-    fetch(`http://localhost:5000/cycles/${id}`, {
+    fetch(`https://polar-bastion-89865.herokuapp.com/cycles/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",

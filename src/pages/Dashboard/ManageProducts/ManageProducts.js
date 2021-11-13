@@ -12,14 +12,14 @@ const ManageProducts = () => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/cycles')
+        fetch('https://polar-bastion-89865.herokuapp.com/cycles')
         .then(res => res.json())
         .then(data => setProducts(data))
     }, [])
 
     /* product delete */
     const handleDelete = id =>{
-      fetch(`http://localhost:5000/cycles/${id}`, {
+      fetch(`https://polar-bastion-89865.herokuapp.com/cycles/${id}`, {
         method: 'DELETE'
       })
       .then(res => res.json())

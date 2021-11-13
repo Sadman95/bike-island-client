@@ -9,7 +9,7 @@ const AllOrders = () => {
     const [shipped, setShipped] = useState(false);
 
     useEffect(()=>{
-        fetch('http://localhost:5000/allOrders')
+        fetch('https://polar-bastion-89865.herokuapp.com/allOrders')
         .then(res => res.json())
         .then(data => setOrders(data))
     }, [])
@@ -17,7 +17,7 @@ const AllOrders = () => {
 
     /* confirm */
     const confirmOrder = id =>{
-        fetch(`http://localhost:5000/orders/${id}`)
+        fetch(`https://polar-bastion-89865.herokuapp.com/orders/${id}`)
         .then(res => res.json())
         .then(data => {
           if(data.status === 'pending'){
@@ -27,7 +27,7 @@ const AllOrders = () => {
     }
 
     const updateStatus = (id, data) =>{
-        fetch(`http://localhost:5000/orders/${id}`, {
+        fetch(`https://polar-bastion-89865.herokuapp.com/orders/${id}`, {
             method: 'PUT',
             headers: {
               'content-type': 'application/json'
@@ -45,7 +45,7 @@ const AllOrders = () => {
 
     /* delete */
     const deleteOrder = id =>{
-      fetch(`http://localhost:5000/allOrders/${id}`, {
+      fetch(`https://polar-bastion-89865.herokuapp.com/allOrders/${id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
