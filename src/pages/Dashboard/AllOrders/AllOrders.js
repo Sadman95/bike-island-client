@@ -1,5 +1,6 @@
 import { Table, TableContainer, TableBody, TableHead, TableCell, TableRow, Button, Paper, Alert } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import swal from 'sweetalert';
 
 
 const AllOrders = () => {
@@ -38,6 +39,7 @@ const AllOrders = () => {
           if(result.modifiedCount === 1){
             setShipped(true);
           }
+          setRemove(false);
         })
     }
 
@@ -49,6 +51,9 @@ const AllOrders = () => {
         .then((res) => res.json())
         .then((data) => {
           if (data.deletedCount === 1) {
+            swal("Are you sure you want to do this?", {
+              buttons: ["No!", "Yes!"],
+            });
             setRemove(true);
             const restOrders = orders.filter((order) => order._id !== id);
             setOrders(restOrders);

@@ -1,5 +1,6 @@
 import { TableContainer, Table, TableBody, TableCell, TableRow, TableHead, Button,Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import swal from 'sweetalert';
 import ManageModal from './ManageModal/ManageModal';
 
 const ManageProducts = () => {
@@ -16,6 +17,22 @@ const ManageProducts = () => {
         .then(data => setProducts(data))
     }, [])
 
+    /* product delete */
+    const handleDelete = id =>{
+      fetch(`http://localhost:5000/cycles/${id}`, {
+        method: 'DELETE'
+      })
+      .then(res => res.json())
+      .then(data => {
+        if(data.deletedCount === 1){
+          swal("Are you sure you want to delete this?", {
+            buttons: ["No!", "Yes!"],
+          });
+        }
+        const restProducts = products.filter(product => product._id !== id);
+        setProducts(restProducts);
+      })
+    }
 
 
     return (
@@ -47,11 +64,19 @@ const ManageProducts = () => {
                   <TableCell align="right">
                     
                     <Button
+                    sx={{mb: 1}}
                       onClick={handleOpen}
                       variant="contained"
                       color="secondary"
                     >
                       Update
+                    </Button>
+                    <Button
+                      onClick={()=>handleDelete(row._id)}
+                      variant="contained"
+                      color='success'
+                    >
+                      Delete
                     </Button>
                     <ManageModal id={row._id} image={row.productImg} name={row.productTitle} description={row.productDesc} price={row.productPrice} open={open} handleClose={handleClose}></ManageModal>
                   </TableCell>
