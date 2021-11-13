@@ -7,6 +7,12 @@ import {useHistory, useLocation} from 'react-router-dom';
 import Navigation from '../../pages/shared/Navigation/Navigation'
 
 
+/* 
+admin email: admin@admin.com
+admin pass: Admin1234
+*/
+
+
 const LogIn = () => {
   const { logInUser, authError, user, admin} = useAuth();
 
