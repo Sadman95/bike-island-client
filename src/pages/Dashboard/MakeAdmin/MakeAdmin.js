@@ -7,6 +7,7 @@ import { Box } from '@mui/system';
 const MakeAdmin = () => {
     const {user} = useAuth();
     const [success, setSuccess] = useState(false);
+    const [error, setError] = useState(false);
     const { register, handleSubmit, reset } = useForm();
 
   const onSubmit = data => {
@@ -22,6 +23,9 @@ const MakeAdmin = () => {
       .then(data => {
           if(data.modifiedCount === 1){
               setSuccess(true);
+          }
+          else{
+              setError(true);
           }
       })
       reset()
@@ -40,7 +44,9 @@ const MakeAdmin = () => {
     
     return (
         <Box sx={formBody}>
-            
+            {
+                error && <Alert severity='error'>Error Occurred</Alert>
+            }
             <Typography variant='h4' fontWeight='bold' color='darkorchid' component='div'>Add Admin</Typography>
              <form onSubmit={handleSubmit(onSubmit)}>
              <input style={{width: '100%', display: 'block', padding: '6px 12px'}} type='email' placeholder='Enter user email to make admin' {...register("adminEmail")} />

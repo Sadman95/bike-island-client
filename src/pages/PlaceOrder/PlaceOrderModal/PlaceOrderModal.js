@@ -31,6 +31,7 @@ const PlaceOrderModal = ({product, open, handleClose}) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = data => {
+      data.status = 'pending';
       data.image = productImg;
       data.title = productTitle;
       data.price = productPrice;

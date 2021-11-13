@@ -6,15 +6,15 @@ const LoadReview = ({ review }) => {
   const { reviewMsg, rating, userName, imgUrl, title } = review;
   return (
     <Grid item xs={4} sm={4} md={4}>
-      <Card sx={{ display: "flex", minHeight: '250px', boxShadow: 10 }}>
+      <Card sx={{ display: "flex", boxShadow: 10,height: '300px', padding: 2, alignItems: 'center'  }}>
         <CardMedia
           component="img"
-          sx={{ width: 150 }}
+          sx={{ height: 80,width: 90 }}
           image={imgUrl}
           alt="review img"
         />
 
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box>
           <CardContent sx={{ flex: "1 0 auto" }}>
             <Typography color='darkorange' component="div" variant="h5">
               {title}

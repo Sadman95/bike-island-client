@@ -16,7 +16,6 @@ const UserOrders = () => {
   const { user } = useAuth();
   const [myOrders, setMyOrders] = useState([]);
   const [remove, setRemove] = useState(false);
-  const [pending, setPending] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:5000/orders?email=${user.email}`)
@@ -41,25 +40,7 @@ const UserOrders = () => {
       });
   };
 
-    /* place order */
-   
-    const placeOrder = (id) => {
-      const selected = myOrders.find(order => order._id === id);
-      console.log(id);
-      fetch(`http://localhost:5000/orders?email=${user.email}&_id=${id}`, {
-        method: 'PUT',
-        headers: {
-          'content-type': 'application/json'
-        },
-        body: JSON.stringify(selected),
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(data.acknowledged){
-          setPending(true);
-        }
-      })
-    };
+
 
   return (
     <>
@@ -72,6 +53,7 @@ const UserOrders = () => {
                 <TableCell>Product Image</TableCell>
                 <TableCell align="center">Product Title</TableCell>
                 <TableCell align="center">Product Price</TableCell>
+                <TableCell align="center">Status</TableCell>
                 <TableCell align="center">Action</TableCell>
               </TableRow>
             </TableHead>
@@ -86,25 +68,9 @@ const UserOrders = () => {
                   </TableCell>
                   <TableCell align="center">{row.title}</TableCell>
                   <TableCell align="center">${row.price}</TableCell>
+                  <TableCell align="center">{row.status}</TableCell>
                   <TableCell align="center">
-                    {
-                      pending ? <Button
-                      sx={{ mr: 1 }}
-          
-                      variant="contained"
-                      color='warning'
-                    >
-                      Pending...
-                    </Button>:
-                    <Button
-                    sx={{ mr: 1 }}
-                    onClick={() => placeOrder(row._id)}
-                    variant="contained"
-                    color='info'
-                  >
-                    Place
-                  </Button>
-                    }
+                   
                     <Button
                       onClick={() => deleteOrder(row._id)}
                       variant="contained"
