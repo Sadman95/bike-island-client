@@ -15,7 +15,7 @@ const Products = () => {
   return (
     <div id='products'>
       <Container sx={{mt: 28}}>
-        <Typography fontWeight='bold' textAlign='center' variant='h4' component='div'>Products</Typography>
+        <Typography mb='24px' fontWeight='bold' textAlign='center' variant='h4' component='div'>Products</Typography>
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}

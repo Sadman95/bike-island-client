@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 import { useForm } from "react-hook-form";
@@ -18,32 +18,43 @@ const AddProduct = () => {
 
         reset()
     };
+
+    const addProductStyle = {
+        mt: 8, 
+        textAlign: 'center', 
+        bgcolor: 'lightgray',
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        padding: '32px'
+    }
+
     return (
-        <Box sx={{mt: 8, textAlign: 'center'}}>
+        <Box sx={addProductStyle}>
             <Typography color='primary' variant='h4' component='div'>
                 Add A Product
             </Typography>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form style={{width: '50%',backgroundColor: 'white',borderRadius: '24px', padding: '24px'}} onSubmit={handleSubmit(onSubmit)}>
                 <label htmlFor="image">Image Url</label>
                 <br />
-                <input  id='image' placeholder='Image URL' type='url' {...register("productImg",  { required: true })} />
+                <input style={{width: '90%', marginBottom: '16px'}}  id='image' placeholder='Image URL' type='url' {...register("productImg",  { required: true })} />
                 <br />
                 <label htmlFor="title">Title</label>
                 <br />
-                <input  id='title' placeholder='Product Title' type='text' {...register("productTitle",  { required: true })} />
+                <input style={{width: '90%', marginBottom: '16px'}}  id='title' placeholder='Product Title' type='text' {...register("productTitle",  { required: true })} />
                 <br />
                 <label htmlFor="desc">Description</label>
                 <br />
-                <textarea  id='desc' placeholder='Product description' type='text' {...register("productDesc",  { required: true })} />
+                <textarea style={{width: '90%', marginBottom: '16px'}}  id='desc' placeholder='Product description' type='text' {...register("productDesc",  { required: true })} />
                 <br />
                 <label htmlFor="price">Price</label>
                 <br />
-                <input  id='price' placeholder='Product Price' type='number' {...register("productPrice",  { required: true })} />
+                <input style={{width: '90%', marginBottom: '16px'}}  id='price' placeholder='Product Price' type='number' {...register("productPrice",  { required: true })} />
                 <br />
       
       {errors.exampleRequired && <span>This field is required</span>}
-      
-      <input style={{marginTop: 10}} type="submit" value='Add Product'/>
+        <Button variant='contained' color='success'  type="submit">Add Product</Button>
     </form>
         </Box>
     );

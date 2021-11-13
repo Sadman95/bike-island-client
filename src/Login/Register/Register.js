@@ -1,8 +1,10 @@
-import { Container, Grid, Typography } from "@mui/material";
+import { Button, Container, Grid, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
 import useAuth from "../../../src/hooks/useAuth/useAuth";
+import '../Login/Form.css'
 
 const Register = () => {
   const history = useHistory();
@@ -26,14 +28,15 @@ const Register = () => {
 
 
   return (
-    <Container sx={{ mt: 24 }}>
+    <Container sx={{ mt: 12 }}>
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 2, sm: 4, md: 12 }}
       >
         <Grid item xs={2} sm={4} md={6}>
-          <Typography color="indianred" variant="h6" component="div">
+          <Box className='formLeft'>
+          <Typography mb='24px' color="indianred" variant="h6" component="div">
             Register
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -46,32 +49,30 @@ const Register = () => {
               placeholder="Your Name"
               {...register("name", { minLength: 3, maxLength: 20 })}
             />
-            <br />
+            
             <Typography color="red">
               {errors.name?.type === "minLength" && "Can't be taken"}
               {errors.name?.type === "maxLength" && "Can't be taken"}
             </Typography>
 
-            <br />
+            
             <label htmlFor="email">Email</label>
             <br />
             <input
-              style={{ marginBottom: '4px', display: 'block', width: '80%' ,padding: '2px 4px' }}
+              style={{ marginBottom: '6px', display: 'block', width: '80%' ,padding: '2px 4px' }}
               id="email"
               type="email"
               placeholder="Your Email"
               {...register("email", { required: true })}
             />
-            <br />
             <Typography color="red">
               {errors.email?.type === "required" && "Email is required"}
             </Typography>
 
-            <br />
             <label htmlFor="password">Password</label>
             <br />
             <input
-              style={{ marginBottom: '4px', display: 'block', width: '80%' ,padding: '2px 4px' }}
+              style={{ marginBottom: '6px', display: 'block', width: '80%' ,padding: '2px 4px' }}
               id="password"
               type="password"
               placeholder="Password"
@@ -88,15 +89,12 @@ const Register = () => {
             </Typography>
             <br />
 
-            <input
-              style={{ marginBottom: "10px" }}
-              type="submit"
-              value="Sign Up"
-            />
-            <Typography variant="subtitle1" component="div">
+            <Button sx={{marginBottom: '12px'}} type="submit" variant='contained' color='secondary'>Sign Up</Button>
+            <Typography color='lightsalmon' variant="subtitle1" component="div">
               Already Having An Account? Please <Link style={{textDecoration: 'underline'}} to="/login">Log In</Link>
             </Typography>
           </form>
+          </Box>
         </Grid>
         <Grid item xs={2} sm={4} md={6}>
           <img src="https://i.ibb.co/JCfBY5y/form.png" alt="img" />

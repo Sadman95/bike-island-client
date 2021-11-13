@@ -1,0 +1,9 @@
+body{
+    background-color: rgb(233, 233, 233);
+}
+
+.formLeft{
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+}

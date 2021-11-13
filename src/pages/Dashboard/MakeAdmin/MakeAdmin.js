@@ -32,13 +32,10 @@ const MakeAdmin = () => {
   };
 
   const formBody = {
-      position: 'absolute',
-      left: '50%',
-      top: '50%',
-      transform: 'translate(-50%, -50%)',
       textAlign: 'center',
-      border: '1px solid gray',
-      padding: '50px 150px'
+      padding: '50px',
+      borderRadius: '24px',
+      backgroundColor: 'lavender'
   }
 
     

@@ -1,10 +1,12 @@
-import { Alert, Container, Grid, Typography } from "@mui/material";
+import { Alert, Button, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth/useAuth";
 import {useHistory, useLocation} from 'react-router-dom';
-import Navigation from '../../pages/shared/Navigation/Navigation'
+import Navigation from '../../pages/shared/Navigation/Navigation';
+import './Form.css'
+import { Box } from "@mui/system";
 
 
 /* 
@@ -40,7 +42,7 @@ const LogIn = () => {
       user.email && <Navigation></Navigation>
     }
 
-<Container sx={{ mt: 24 }}>
+<Container sx={{ mt: 12 }}>
       <Grid
         sx={{ display: "flex", alignItems: "center" }}
         container
@@ -48,21 +50,22 @@ const LogIn = () => {
         columns={{ xs: 2, sm: 4, md: 12 }}
       >
         <Grid item xs={2} sm={4} md={6}>
-          <Typography variant="h5" component="div" color="goldenrod">
+          <Box className='formLeft'>
+          <Typography mb='24px' variant="h5" component="div" color="goldenrod">
             Log In
           </Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="email">Email</label>
             <br />
             <input
-              style={{ marginBottom: "16px", display: 'block', width: '80%', padding: '2px 4px' }}
+              style={{ marginBottom: "8px", display: 'block', width: '80%', padding: '2px 4px' }}
               id="email"
               type="email"
               placeholder="Your Email"
               {...register("email", { required: true })}
             />
             {errors.email?.type === "required" && "Email is required"}
-            <br />
+            
             <label htmlFor="password">Password</label>
             <br />
             <input
@@ -88,12 +91,14 @@ const LogIn = () => {
                 Successfully logged in!!!
               </Alert>
             )}
-            <input type="submit" value="Log In" />
+            <br />
+            <Button  type="submit" variant='contained' color='primary'>Log In</Button>
 
-            <Typography variant="subtitle1" component="div">
+            <Typography mt='8px' variant="subtitle1" color='lightsalmon' component="div">
               Not Having An Account? Please <Link style={{textDecoration: 'underline'}} to="/register">Register</Link>
             </Typography>
           </form>
+          </Box>
         </Grid>
         <Grid item xs={2} sm={4} md={6}>
           <img src="https://i.ibb.co/JCfBY5y/form.png" alt="img" />
