@@ -1,4 +1,4 @@
-import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { Card, CardContent, CardMedia, Grid, Rating, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 
@@ -23,7 +23,11 @@ const LoadReview = ({ review }) => {
               "{reviewMsg}"
             </Typography>
             <Typography component="div" variant="subtitle2">
-              {rating}
+            <Rating
+        name="simple-controlled"
+        value={rating}
+        
+      />
             </Typography>
             <Typography
             fontWeight='bold'

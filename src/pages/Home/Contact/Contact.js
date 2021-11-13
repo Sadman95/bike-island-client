@@ -12,7 +12,7 @@ const contactBg ={
     backgroundSize: 'cover',
     backgroundColor: 'lightCoral',
     backgroundBlendMode: 'multiply',
-    marginTop: '72px',
+    marginTop: '100px',
     padding: '48px 0',
     backgroundAttachment: 'fixed'
 }
