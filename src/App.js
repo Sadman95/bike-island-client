@@ -7,6 +7,7 @@ import LogIn from './Login/Login/Login';
 import Register from './Login/Register/Register';
 import AllProducts from './pages/AllProducts/AllProducts';
 import Dashboard from './pages/Dashboard/Dashboard/Dashboard';
+import NotFound from './pages/NotFound/NotFound';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 import Purchase from './pages/Purchase/Purchase/Purchase';
 
@@ -39,10 +40,14 @@ function App() {
             <Dashboard></Dashboard>
           </Route>
           
-          
           <PrivateRoute exact path='/cycles/:id'>
             <Purchase></Purchase>
           </PrivateRoute>
+
+          <Route path='*'>
+            <NotFound></NotFound>
+          </Route>
+
         </Switch>
         
       </Router>
