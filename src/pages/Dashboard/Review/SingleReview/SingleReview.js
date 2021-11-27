@@ -4,9 +4,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, CardActionArea } from "@mui/material";
+import { CardActionArea } from "@mui/material";
 import { useForm } from "react-hook-form";
-import SendIcon from "@mui/icons-material/Send";
 import useAuth from "../../../../hooks/useAuth/useAuth";
 import swal from "sweetalert";
 
@@ -37,8 +36,8 @@ const SingleReview = ({ order }) => {
   };
 
   return (
-    <Grid item xs={2} sm={4} md={6}>
-      <Card sx={{ maxWidth: 450 }}>
+    <Grid item xs={12} sm={6} md={4}>
+      <Card>
         <CardActionArea>
           <CardMedia
             component="img"
@@ -66,9 +65,7 @@ const SingleReview = ({ order }) => {
               />
               <br />
               <br />
-              <Button type="submit" variant="contained" endIcon={<SendIcon />}>
-                Send
-              </Button>
+              <input type="submit" value='Send' className='btn btn-primary' />
             </form>
           </CardContent>
         </CardActionArea>

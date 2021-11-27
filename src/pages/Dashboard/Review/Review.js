@@ -19,7 +19,7 @@ const Review = () => {
           gap="4"
           container
           spacing={{ xs: 2, md: 2 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
+          columns={{ xs: 12, sm: 12, md: 12 }}
         >
           {myOrders.map((order, index) => (
             <SingleReview key={index} order={order}></SingleReview>

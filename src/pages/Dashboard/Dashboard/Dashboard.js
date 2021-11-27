@@ -22,6 +22,7 @@ import MakeAdmin from '../MakeAdmin/MakeAdmin';
 import AllOrders from '../AllOrders/AllOrders';
 import AddProduct from '../../Admin/AddProduct/AddProduct';
 import ManageProducts from '../ManageProducts/ManageProducts';
+import './Dashboard.css'
 
 const drawerWidth = 250;
 
@@ -44,7 +45,7 @@ function Dashboard(props) {
   }
 
   const drawer = (
-    <div>
+    <div id='drawer'>
       <Toolbar>
         <Typography color='GrayText' variant='subtitle2' component='div'>
             {user.email}
@@ -191,10 +192,6 @@ function Dashboard(props) {
 }
 
 Dashboard.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
   window: PropTypes.func,
 };
 

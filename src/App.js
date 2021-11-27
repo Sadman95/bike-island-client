@@ -10,6 +10,7 @@ import Dashboard from './pages/Dashboard/Dashboard/Dashboard';
 import NotFound from './pages/NotFound/NotFound';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute';
 import Purchase from './pages/Purchase/Purchase/Purchase';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 function App() {

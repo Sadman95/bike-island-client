@@ -25,7 +25,7 @@ const LoadReview = ({ review }) => {
             <Typography component="div" variant="subtitle2">
             <Rating
         name="simple-controlled"
-        value={rating}
+        value={parseInt(rating)}
         
       />
             </Typography>

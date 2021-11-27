@@ -1,0 +1,8 @@
+#drawer a{
+    text-decoration: none;
+    color: tomato;
+    font-weight: 600;
+}
+#drawer a:hover{
+    color: rgb(255, 2, 2);
+}

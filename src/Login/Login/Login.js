@@ -9,10 +9,6 @@ import './Form.css'
 import { Box } from "@mui/system";
 
 
-/* 
-admin email: admin@admin.com
-admin pass: Admin1234
-*/
 
 
 const LogIn = () => {
@@ -39,7 +35,7 @@ const LogIn = () => {
   return (
     <>
     {
-      user.email && <Navigation></Navigation>
+      user.email && <Navigation ></Navigation>
     }
 
 <Container sx={{ mt: 12 }}>

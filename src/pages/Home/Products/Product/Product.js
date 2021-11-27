@@ -19,8 +19,8 @@ const Product = ({ product }) => {
   };
 
   return (
-    <Grid item xs={4} sm={4} md={4}>
-      <Card className='product' sx={{boxShadow: 0, maxWidth: 345, textAlign: 'center', py: 2, borderRadius: '16px' }}>
+    <Grid item xs={12} sm={6} md={4}>
+      <Card className='product' sx={{boxShadow: 0, textAlign: 'center', py: 2, borderRadius: '16px' }}>
           <CardMedia
             component="img"
             height="280"
