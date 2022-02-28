@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Grid, Typography, Button } from "@mui/material";
+import { baseUrl } from "../../../backend/api";
 import PlaceOrderModal from "../../PlaceOrder/PlaceOrderModal/PlaceOrderModal";
-import  Navigation from '../../shared/Navigation/Navigation'
 
 const Purchase = () => {
   const { id } = useParams();
@@ -13,38 +13,62 @@ const Purchase = () => {
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    fetch(`https://polar-bastion-89865.herokuapp.com/cycles/${id}`)
+    fetch(`${baseUrl}/cycles/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data));
+
+    return () => {
+      setProduct(null);
+    };
   }, [id]);
   return (
     <>
-    <Navigation></Navigation>
-    <Container sx={{ mt: 24 }}>
-      <Grid
-       sx={{display: 'flex', alignItems: 'center'}}
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 4, md: 12 }}
-      >
-        <Grid item xs={4} sm={4} md={6}>
-            <img src={product.productImg} alt="" />
+      <Container sx={{ mt: 24 }}>
+        <Grid
+          sx={{
+            display: "flex",
+            flexWrap: { xs: "wrap", md: "nowrap" },
+            alignItems: "center",
+          }}
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 4, md: 12 }}
+        >
+          <Box>
+            <img width={"100%"} src={product.productImg} alt="" />
+          </Box>
+          <Box sx={{ padding: 4, textAlign: "justify" }}>
+            <Typography
+              mb="16px"
+              variant="h4"
+              component="div"
+              fontWeight="bold"
+            >
+              {product.productTitle}
+            </Typography>
+            <Typography
+              mb="24px"
+              variant="p"
+              component="div"
+              fontWeight="medium"
+              color="GrayText"
+            >
+              {product.productDesc}
+            </Typography>
+            <Typography variant="h3" component="div" fontWeight="bold">
+              ${product.productPrice}
+            </Typography>
+            <Button onClick={handleOpen} variant="contained" color="error">
+              Place Order
+            </Button>
+            <PlaceOrderModal
+              product={product}
+              open={open}
+              handleClose={handleClose}
+            ></PlaceOrderModal>
+          </Box>
         </Grid>
-        <Grid item xs={2} sm={4} md={6}>
-            <Typography mb='16px' variant='h4' component='div' fontWeight='bold'>
-                {product.productTitle}
-            </Typography>
-            <Typography mb='24px' variant='p' component='div' fontWeight='medium' color='GrayText'>
-                {product.productDesc}
-            </Typography>
-            <Typography variant='h3' component='div' fontWeight='bold'>
-                ${product.productPrice}
-            </Typography>
-            <Button onClick={handleOpen} variant='contained' color='error'>Place Order</Button>
-            <PlaceOrderModal product={product} open={open} handleClose={handleClose}></PlaceOrderModal>
-        </Grid>
-      </Grid>
-    </Container>
+      </Container>
     </>
   );
 };

@@ -8,24 +8,24 @@ const Review = () => {
   const [myOrders, setMyOrders] = useState([]);
 
   useEffect(() => {
-    fetch(`https://polar-bastion-89865.herokuapp.com/orders?email=${user.email}`)
+    fetch(`${baseUrl}/orders?email=${user.email}`)
       .then((res) => res.json())
       .then((data) => setMyOrders(data));
   }, [user.email]);
 
   return (
-      <Container sx={{ mt: 16 }}>
-        <Grid
-          gap="4"
-          container
-          spacing={{ xs: 2, md: 2 }}
-          columns={{ xs: 12, sm: 12, md: 12 }}
-        >
-          {myOrders.map((order, index) => (
-            <SingleReview key={index} order={order}></SingleReview>
-          ))}
-        </Grid>
-      </Container>
+    <Container sx={{ mt: 16 }}>
+      <Grid
+        gap="4"
+        container
+        spacing={{ xs: 2, md: 2 }}
+        columns={{ xs: 12, sm: 12, md: 12 }}
+      >
+        {myOrders.map((order, index) => (
+          <SingleReview key={index} order={order}></SingleReview>
+        ))}
+      </Grid>
+    </Container>
   );
 };
 

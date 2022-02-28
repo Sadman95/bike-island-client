@@ -1,13 +1,12 @@
 import React from "react";
 import useAuth from "../../../hooks/useAuth/useAuth";
+import Footer from "../../shared/Footer/Footer";
 import About from "../About/About";
+import Contact from "../Contact/Contact";
 import Header from "../Header/Header";
+import LoadReviews from "../LoadReviews/LoadReviews";
 import Products from "../Products/Products";
 import Services from "../Services/Services";
-import Navigation from "../../shared/Navigation/Navigation";
-import Footer from "../../shared/Footer/Footer";
-import LoadReviews from "../LoadReviews/LoadReviews";
-import Contact from "../Contact/Contact";
 import ToggleTop from "../ToggleTop/ToggleTop";
 
 const Home = () => {
@@ -27,7 +26,6 @@ const Home = () => {
 
   return (
     <div id="home">
-      <Navigation></Navigation>
       <Header></Header>
       <Services></Services>
       <About></About>

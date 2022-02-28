@@ -5,6 +5,7 @@ import React from "react";
 const headerStyle = {
   background: "url('https://i.ibb.co/YyNRgm1/banner.jpg') center no-repeat",
   backgroundSize: "cover",
+  width: "100%",
   minHeight: "700px",
   backgroundColor: "lightBlue",
   backgroundBlendMode: "multiply",
@@ -23,9 +24,9 @@ const Header = () => {
     <Box sx={headerStyle}>
       <Box sx={headerContent}>
         <Typography
-          sx={{ mb: 4 }}
+          sx={{ mt: 8 }}
+          variant="h3"
           color="white"
-          variant="h2"
           fontWeight="bold"
           component="div"
         >

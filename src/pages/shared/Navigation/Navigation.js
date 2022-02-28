@@ -3,6 +3,7 @@ import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import useAuth from "../../../hooks/useAuth/useAuth";
+import { data } from "./data";
 
 const Navigation = () => {
   const [bgcolor, setBgcolor] = useState(false);
@@ -17,6 +18,10 @@ const Navigation = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", changeBg);
+
+    return () => {
+      window.removeEventListener("scroll", changeBg);
+    };
   }, []);
 
   const { user, logOut } = useAuth();
@@ -36,24 +41,16 @@ const Navigation = () => {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="m-auto">
-            <Nav.Link as={HashLink} to="/home#home">
-              Home
-            </Nav.Link>
-            <Nav.Link as={HashLink} to="/home#services">
-              Services
-            </Nav.Link>
-            <Nav.Link as={HashLink} to="/home#about">
-              About
-            </Nav.Link>
-            <Nav.Link as={HashLink} to="/home#products">
-              Products
-            </Nav.Link>
-            <Nav.Link as={HashLink} to="/home#reviews">
-              Reviews
-            </Nav.Link>
-            <Nav.Link as={HashLink} to="/home#contact">
-              Contact
-            </Nav.Link>
+            {data.map((item) => (
+              <Nav.Link
+                style={{ color: "white" }}
+                key={item.title}
+                as={HashLink}
+                to={`/home/#${item.hashValue}`}
+              >
+                {item.title}
+              </Nav.Link>
+            ))}
           </Nav>
           {user.email ? (
             <>
@@ -67,7 +64,9 @@ const Navigation = () => {
                     Log Out
                   </NavDropdown.Item>
                 </NavDropdown>
-                <Nav.Link eventKey={2}>{user.displayName}</Nav.Link>
+                <Nav.Link style={{ color: "white" }} eventKey={2}>
+                  {user.displayName}
+                </Nav.Link>
               </Nav>
             </>
           ) : (

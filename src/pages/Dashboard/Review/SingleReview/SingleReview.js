@@ -1,13 +1,13 @@
-import { Grid } from "@mui/material";
-import React from "react";
+import { CardActionArea, Grid } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
+import React from "react";
 import { useForm } from "react-hook-form";
-import useAuth from "../../../../hooks/useAuth/useAuth";
 import swal from "sweetalert";
+import { baseUrl } from "../../../../backend/api";
+import useAuth from "../../../../hooks/useAuth/useAuth";
 
 const SingleReview = ({ order }) => {
   const { image, title } = order;
@@ -18,7 +18,7 @@ const SingleReview = ({ order }) => {
     data.userName = user.displayName;
     data.imgUrl = image;
     data.title = title;
-    fetch("https://polar-bastion-89865.herokuapp.com/reviews", {
+    fetch(`${baseUrl}/reviews`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -65,7 +65,7 @@ const SingleReview = ({ order }) => {
               />
               <br />
               <br />
-              <input type="submit" value='Send' className='btn btn-primary' />
+              <input type="submit" value="Send" className="btn btn-primary" />
             </form>
           </CardContent>
         </CardActionArea>

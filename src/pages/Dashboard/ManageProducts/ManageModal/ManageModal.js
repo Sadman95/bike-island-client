@@ -1,9 +1,10 @@
 import { Button, Fade, Modal } from "@mui/material";
+import Backdrop from "@mui/material/Backdrop";
 import { Box } from "@mui/system";
 import React from "react";
-import Backdrop from "@mui/material/Backdrop";
 import { useForm } from "react-hook-form";
 import swal from "sweetalert";
+import { baseUrl } from "../../../../backend/api";
 
 const style = {
   position: "absolute",
@@ -21,7 +22,7 @@ const style = {
 const ManageModal = ({ id, open, handleClose }) => {
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
-    fetch(`https://polar-bastion-89865.herokuapp.com/cycles/${id}`, {
+    fetch(`${baseUrl}/cycles/${id}`, {
       method: "PUT",
       headers: {
         "content-type": "application/json",

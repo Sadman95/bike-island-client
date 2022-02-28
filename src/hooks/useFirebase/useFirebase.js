@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
-import initAuthentication from "../../Login/FireBase/firebase.init";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
-  onAuthStateChanged,
 } from "firebase/auth";
+import { useEffect, useState } from "react";
 import swal from "sweetalert";
+import { baseUrl } from "../../backend/api";
+import initAuthentication from "../../Login/FireBase/firebase.init";
 initAuthentication();
 
 const useFirebase = () => {
@@ -39,22 +40,22 @@ const useFirebase = () => {
   };
 
   /* save user to DB */
-   const saveUser = (name, email) =>{
-      const user = {name: name, email: email};
-      fetch('https://polar-bastion-89865.herokuapp.com/users', {
-          method: 'POST',
-          headers: {
-              'content-type': 'application/json'
-          },
-          body: JSON.stringify(user),
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(data.insertedId){
+  const saveUser = (name, email) => {
+    const user = { name: name, email: email };
+    fetch(`${baseUrl}/users`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
           swal("Great!", "You are saved successfully!", "success");
         }
-      })
-  } 
+      });
+  };
 
   /* update user */
   const updateUser = (name) => {
@@ -116,13 +117,12 @@ const useFirebase = () => {
     return () => unsubscribe;
   }, [auth]);
 
-
   /* admin accessibility */
-  useEffect(() =>{
-    fetch(`https://polar-bastion-89865.herokuapp.com/users/${user.email}`)
-    .then(res => res.json())
-    .then(data => setAdmin(data.admin))
-  }, [user.email])
+  useEffect(() => {
+    fetch(`${baseUrl}/users/${user.email}`)
+      .then((res) => res.json())
+      .then((data) => setAdmin(data.admin));
+  }, [user.email]);
 
   return {
     user,

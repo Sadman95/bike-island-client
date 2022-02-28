@@ -8,9 +8,9 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import Paper from "@mui/material/Paper";
 import React, { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth/useAuth";
-import Paper from "@mui/material/Paper";
 
 const UserOrders = () => {
   const { user } = useAuth();
@@ -18,16 +18,14 @@ const UserOrders = () => {
   const [remove, setRemove] = useState(false);
 
   useEffect(() => {
-    fetch(`https://polar-bastion-89865.herokuapp.com/orders?email=${user.email}`)
+    fetch(`${baseUrl}/orders?email=${user.email}`)
       .then((res) => res.json())
       .then((data) => setMyOrders(data));
   }, [user.email]);
 
-
-
   /* delete order */
   const deleteOrder = (id) => {
-    fetch(`https://polar-bastion-89865.herokuapp.com/orders/${id}`, {
+    fetch(`${baseUrl}/orders/${id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -39,8 +37,6 @@ const UserOrders = () => {
         }
       });
   };
-
-
 
   return (
     <>
@@ -70,7 +66,6 @@ const UserOrders = () => {
                   <TableCell align="center">${row.price}</TableCell>
                   <TableCell align="center">{row.status}</TableCell>
                   <TableCell align="center">
-                   
                     <Button
                       onClick={() => deleteOrder(row._id)}
                       variant="contained"

@@ -1,6 +1,7 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import useHistory from "react-router";
+import { useHistory } from "react-router-dom";
+import { baseUrl } from "../../../backend/api";
 import Product from "./Product/Product";
 
 const Products = () => {
@@ -13,13 +14,13 @@ const Products = () => {
   };
 
   useEffect(() => {
-    fetch("https://polar-bastion-89865.herokuapp.com/cycles")
+    fetch(`${baseUrl}/cycles`)
       .then((res) => res.json())
       .then((data) => setProducts(data));
   }, []);
   return (
     <div id="products">
-      <Container sx={{ mt: 28 }}>
+      <Container sx={{ mt: 28, textAlign: "center" }}>
         <Typography
           mb="24px"
           fontWeight="bold"
