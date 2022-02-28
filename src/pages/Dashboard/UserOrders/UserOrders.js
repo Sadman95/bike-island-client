@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import React, { useEffect, useState } from "react";
+import { baseUrl } from "../../../backend/api";
 import useAuth from "../../../hooks/useAuth/useAuth";
 
 const UserOrders = () => {

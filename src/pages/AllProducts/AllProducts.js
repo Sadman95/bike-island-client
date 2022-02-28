@@ -1,7 +1,6 @@
 import { Container, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { baseUrl } from "../../backend/api";
-import Footer from "../shared/Footer/Footer";
 import AllProduct from "./AllProduct/AllProduct";
 
 const AllProducts = () => {
@@ -33,7 +32,6 @@ const AllProducts = () => {
           ))}
         </Grid>
       </Container>
-      <Footer></Footer>
     </>
   );
 };

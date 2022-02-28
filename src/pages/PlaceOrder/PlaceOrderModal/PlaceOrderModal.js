@@ -3,7 +3,7 @@ import Backdrop from "@mui/material/Backdrop";
 import { Box } from "@mui/system";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import { baseUrl } from "../../../backend/api";
 import useAuth from "../../../hooks/useAuth/useAuth";
@@ -22,7 +22,7 @@ const style = {
 };
 
 const PlaceOrderModal = ({ product, open, handleClose }) => {
-  const history = useHistory();
+  const history = useNavigate();
 
   const { user } = useAuth();
 

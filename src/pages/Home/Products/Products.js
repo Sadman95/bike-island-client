@@ -1,16 +1,16 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../../backend/api";
 import Product from "./Product/Product";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const goToStore = () => {
-    history.push("/allProducts");
+    navigate("/allProducts");
   };
 
   useEffect(() => {

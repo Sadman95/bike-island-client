@@ -43,7 +43,7 @@ const Navigation = () => {
           <Nav className="m-auto">
             {data.map((item) => (
               <Nav.Link
-                style={{ color: "white" }}
+                style={{ color: `${bgcolor ? "white" : "black"}` }}
                 key={item.title}
                 as={HashLink}
                 to={`/home/#${item.hashValue}`}
@@ -64,7 +64,10 @@ const Navigation = () => {
                     Log Out
                   </NavDropdown.Item>
                 </NavDropdown>
-                <Nav.Link style={{ color: "white" }} eventKey={2}>
+                <Nav.Link
+                  style={{ color: `${bgcolor ? "white" : "black"}` }}
+                  eventKey={2}
+                >
                   {user.displayName}
                 </Nav.Link>
               </Nav>

@@ -1,6 +1,5 @@
 import React from "react";
 import useAuth from "../../../hooks/useAuth/useAuth";
-import Footer from "../../shared/Footer/Footer";
 import About from "../About/About";
 import Contact from "../Contact/Contact";
 import Header from "../Header/Header";
@@ -32,7 +31,6 @@ const Home = () => {
       <Products></Products>
       <LoadReviews></LoadReviews>
       <Contact></Contact>
-      <Footer></Footer>
       <ToggleTop></ToggleTop>
     </div>
   );

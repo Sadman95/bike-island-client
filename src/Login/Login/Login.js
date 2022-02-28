@@ -2,14 +2,14 @@ import { Alert, Button, Container, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth/useAuth";
 import "./Form.css";
 
 const LogIn = () => {
   const { logInUser, authError, user, admin } = useAuth();
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const redirect_uri = location.state?.from || "/login";
 
@@ -22,7 +22,7 @@ const LogIn = () => {
   const onSubmit = (data) => {
     const { email, password } = data;
     logInUser(email, password);
-    history.push(redirect_uri);
+    navigate(redirect_uri);
     reset();
     console.log(admin);
   };

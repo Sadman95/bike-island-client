@@ -1,10 +1,12 @@
 import { Box } from "@mui/material";
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Outlet, useLocation } from "react-router";
+import { Navigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth/useAuth";
 
-const PrivateRoute = ({ children, ...rest }) => {
+const PrivateRoute = () => {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
 
   const style = {
     position: "relative",
@@ -24,23 +26,11 @@ const PrivateRoute = ({ children, ...rest }) => {
     );
   }
 
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        user.email ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: location },
-            }}
-          />
-        )
-      }
-    ></Route>
-  );
+  if (!user.email) {
+    return <Navigate to="/login" state={{ from: location }} />;
+  }
+
+  return <Outlet />;
 };
 
 export default PrivateRoute;
