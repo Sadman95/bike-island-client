@@ -1,3 +1,5 @@
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -54,7 +56,7 @@ const Navigation = () => {
           </Nav>
           {user.email ? (
             <>
-              <Nav>
+              <Nav style={{ display: "flex", alignItems: "center" }}>
                 <NavDropdown title="" id="collasible-nav-dropdown">
                   <NavDropdown.Item as={Link} to="/dashboard">
                     Dashboard
@@ -70,6 +72,29 @@ const Navigation = () => {
                 >
                   {user.displayName}
                 </Nav.Link>
+                <Box sx={{ position: "relative" }}>
+                  <ShoppingCartOutlinedIcon
+                    color={bgcolor ? "primary" : "secondary"}
+                  />
+                  <Box
+                    bgcolor={`${bgcolor ? "blue" : "purple"}`}
+                    sx={{
+                      height: 4,
+                      width: 4,
+                      padding: 1,
+                      borderRadius: "50%",
+                      color: "white",
+                      position: "absolute",
+                      right: -8,
+                      top: -8,
+                      display: "flex",
+                      placeItems: "center",
+                      fontSize: 8,
+                    }}
+                  >
+                    1
+                  </Box>
+                </Box>
               </Nav>
             </>
           ) : (

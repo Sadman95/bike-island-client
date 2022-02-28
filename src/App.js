@@ -27,7 +27,7 @@ function App() {
   const [visible, setVisible] = useState(true);
   const { user } = useAuth();
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
 
   useEffect(() => {
     if (location.pathname === "/" || "/home" || "/allProducts") {
