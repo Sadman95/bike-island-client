@@ -24,6 +24,7 @@ import Purchase from "./pages/Purchase/Purchase/Purchase";
 import Navigation from "./pages/shared/Navigation/Navigation";
 
 function App() {
+  const [cart, setCart] = useState([]);
   const [visible, setVisible] = useState(true);
   const { user } = useAuth();
   const location = useLocation();
@@ -39,7 +40,7 @@ function App() {
 
   return (
     <div className="App">
-      {visible && <Navigation />}
+      {visible && <Navigation cart={cart} />}
       <Routes>
         <Route path={"/"} element={<Home />} />
         <Route path="/home" element={<Home />} />
@@ -71,7 +72,10 @@ function App() {
         </Route>
 
         <Route element={<PrivateRoute />}>
-          <Route path={"/cycles/:id"} element={<Purchase />} />
+          <Route
+            path={"/cycles/:id"}
+            element={<Purchase cart={cart} setCart={setCart} />}
+          />
         </Route>
 
         <Route path="*" element={<NotFound />} />

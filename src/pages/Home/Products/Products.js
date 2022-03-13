@@ -1,4 +1,6 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../../../backend/api";
@@ -6,6 +8,15 @@ import Product from "./Product/Product";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
+
+  //aos init:
+
+  useEffect(() => {
+    AOS.init({
+      duration: 2000,
+    });
+    AOS.refresh();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -19,7 +30,7 @@ const Products = () => {
       .then((data) => setProducts(data));
   }, []);
   return (
-    <div id="products">
+    <div id="products" data-aos="zoom-in">
       <Container sx={{ mt: 28, textAlign: "center" }}>
         <Typography
           mb="24px"

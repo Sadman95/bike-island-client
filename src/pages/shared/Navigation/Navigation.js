@@ -1,14 +1,20 @@
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
+import PersistentDrawerRight from "../../../components/PersistantDrawer";
 import useAuth from "../../../hooks/useAuth/useAuth";
 import { data } from "./data";
 
-const Navigation = () => {
+const Navigation = ({ cart }) => {
   const [bgcolor, setBgcolor] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
 
   const changeBg = () => {
     if (window.scrollY >= 80) {
@@ -34,7 +40,7 @@ const Navigation = () => {
       expand="lg"
       bg={bgcolor ? "dark" : "transparent"}
       variant={bgcolor ? "dark" : "light"}
-      style={{ fontWeight: 600 }}
+      style={{ fontWeight: 600, padding: 0 }}
     >
       <Container>
         <Navbar.Brand as={Link} to="/home">
@@ -72,10 +78,13 @@ const Navigation = () => {
                 >
                   {user.displayName}
                 </Nav.Link>
-                <Box sx={{ position: "relative" }}>
-                  <ShoppingCartOutlinedIcon
-                    color={bgcolor ? "primary" : "secondary"}
-                  />
+                <Box sx={{ position: "relative", top: "3rem" }}>
+                  <Button onClick={handleDrawerOpen}>
+                    <ShoppingCartOutlinedIcon
+                      color={bgcolor ? "primary" : "secondary"}
+                    />
+                  </Button>
+
                   <Box
                     bgcolor={`${bgcolor ? "blue" : "purple"}`}
                     sx={{
@@ -85,15 +94,17 @@ const Navigation = () => {
                       borderRadius: "50%",
                       color: "white",
                       position: "absolute",
-                      right: -8,
-                      top: -8,
+                      right: 4,
+                      top: 0,
                       display: "flex",
-                      placeItems: "center",
+                      justifyContent: "center",
+                      alignItems: "center",
                       fontSize: 8,
                     }}
                   >
-                    1
+                    {cart.length}
                   </Box>
+                  <PersistentDrawerRight open={open} setOpen={setOpen} />
                 </Box>
               </Nav>
             </>

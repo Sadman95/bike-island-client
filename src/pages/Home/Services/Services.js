@@ -1,5 +1,7 @@
 import { Container, Grid } from "@mui/material";
 import { Box } from "@mui/system";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import React, { useEffect, useState } from "react";
 import { baseUrl } from "../../../backend/api";
 import Service from "./Service/Service";
@@ -7,13 +9,22 @@ import Service from "./Service/Service";
 const Services = () => {
   const [services, setServices] = useState([]);
 
+  //aos init:
+
+  useEffect(() => {
+    AOS.init({
+      duration: 2000,
+    });
+    AOS.refresh();
+  }, []);
+
   useEffect(() => {
     fetch(`${baseUrl}/services`)
       .then((res) => res.json())
       .then((data) => setServices(data));
   }, []);
   return (
-    <div id="services">
+    <div id="services" data-aos="fade-down">
       <Container sx={{ mt: -18 }}>
         <Box>
           <Grid
