@@ -31,11 +31,10 @@ function App() {
   // console.log(location);
 
   useEffect(() => {
-    if (location.pathname === "/" || "/home" || "/allProducts") {
-      setVisible(true);
-    } else {
+    if (location.pathname.includes("/dashboard")) {
       setVisible(false);
     }
+    return () => setVisible(true);
   }, [location.pathname]);
 
   return (

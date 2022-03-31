@@ -78,7 +78,7 @@ const Navigation = ({ cart }) => {
                 >
                   {user.displayName}
                 </Nav.Link>
-                <Box sx={{ position: "relative", top: "3rem" }}>
+                <Box sx={{ position: "relative", top: "2rem" }}>
                   <Button onClick={handleDrawerOpen}>
                     <ShoppingCartOutlinedIcon
                       color={bgcolor ? "primary" : "secondary"}
@@ -88,9 +88,8 @@ const Navigation = ({ cart }) => {
                   <Box
                     bgcolor={`${bgcolor ? "blue" : "purple"}`}
                     sx={{
-                      height: 4,
-                      width: 4,
-                      padding: 1,
+                      height: 16,
+                      width: 16,
                       borderRadius: "50%",
                       color: "white",
                       position: "absolute",
