@@ -1,1 +1,1 @@
-export const baseUrl = "https://bike-island-server.onrender.com";
+export const baseUrl = import.meta.env.VITE_APP_API_URL;
