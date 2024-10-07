@@ -1,10 +1,10 @@
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import IndeterminateCheckBoxIcon from "@mui/icons-material/IndeterminateCheckBox";
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { baseUrl } from "../../backend/api";
-import PlaceOrderModal from "../../components/modals/place-order";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { baseUrl } from '../../backend/api';
+import PlaceOrderModal from '../../components/modals/place-order';
 
 const Purchase = ({ cart, setCart }) => {
   const { id } = useParams();
@@ -35,18 +35,18 @@ const Purchase = ({ cart, setCart }) => {
       <Container sx={{ mt: 24 }}>
         <Grid
           sx={{
-            display: "flex",
-            flexWrap: { xs: "wrap", md: "nowrap" },
-            alignItems: "center",
+            display: 'flex',
+            flexWrap: { xs: 'wrap', md: 'nowrap' },
+            alignItems: 'center',
           }}
           container
           spacing={{ xs: 2, md: 3 }}
           columns={{ xs: 4, sm: 4, md: 12 }}
         >
           <Box>
-            <img width={"100%"} src={product?.productImg} alt="" />
+            <img width={'100%'} src={product?.productImg} alt="" />
           </Box>
-          <Box sx={{ padding: 4, textAlign: "justify" }}>
+          <Box sx={{ padding: 4, textAlign: 'justify' }}>
             <Typography
               mb="16px"
               variant="h4"
@@ -74,7 +74,7 @@ const Purchase = ({ cart, setCart }) => {
 
               <Button>
                 <IndeterminateCheckBoxIcon
-                  color={cart !== 1 ? "action" : "disabled"}
+                  color={cart !== 1 ? 'action' : 'disabled'}
                 />
               </Button>
             </Box>

@@ -1,7 +1,7 @@
-import { Container, Grid, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { baseUrl } from "../../../backend/api";
-import Review from "../../review";
+import { Container, Grid, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { baseUrl } from '../../../backend/api';
+import Review from '../../review';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -11,7 +11,7 @@ const Reviews = () => {
       .then((res) => res.json())
       .then((data) => setReviews(data));
     
-    return () => setReviews([])
+    return () => setReviews([]);
   }, []);
   return (
     <div id="reviews">

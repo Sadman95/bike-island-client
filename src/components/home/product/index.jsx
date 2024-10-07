@@ -5,10 +5,10 @@ import {
   CardMedia,
   Grid,
   Typography,
-} from "@mui/material";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import "../../../styles/product.module.css";
+} from '@mui/material';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../../../styles/product.module.css';
 
 const Product = ({ product }) => {
   const { _id, productImg, productTitle, productDesc } = product;
@@ -22,7 +22,7 @@ const Product = ({ product }) => {
     <Grid item xs={12} sm={6} md={4}>
       <Card
         className="product"
-        sx={{ boxShadow: 0, textAlign: "center", py: 2, borderRadius: "16px" }}
+        sx={{ boxShadow: 0, textAlign: 'center', py: 2, borderRadius: '16px' }}
       >
         <CardMedia
           component="img"

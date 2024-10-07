@@ -7,11 +7,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import swal from "sweetalert";
-import { baseUrl } from "../../../backend/api";
-import ManageModal from "../../../components/modals/manage-modal";
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import swal from 'sweetalert';
+import { baseUrl } from '../../../backend/api';
+import ManageModal from '../../../components/modals/manage-modal';
 
 const ManageProducts = () => {
   const [open, setOpen] = useState(false);
@@ -29,13 +29,13 @@ const ManageProducts = () => {
   /* product delete */
   const handleDelete = (id) => {
     fetch(`${baseUrl}/cycles/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.deletedCount === 1) {
-          swal("Are you sure you want to delete this?", {
-            buttons: ["No!", "Yes!"],
+          swal('Are you sure you want to delete this?', {
+            buttons: ['No!', 'Yes!'],
           });
         }
         const restProducts = products.filter((product) => product._id !== id);
@@ -61,7 +61,7 @@ const ManageProducts = () => {
             {products.map((row) => (
               <TableRow
                 key={row._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   <img width="100px" src={row.productImg} alt="img" />

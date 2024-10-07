@@ -8,17 +8,15 @@ import { Box } from '@mui/system';
 
 
 const toggleTopStyle = {
-    position: 'fixed',
-    bottom: '20px',
-    right: '20px',
-}
-
-const ToggleTop = () => {
-    return (
-        <Box sx={toggleTopStyle}>
-            <HashLink id='topToggle' to='/home#home'><NavigationIcon color='warning'></NavigationIcon></HashLink>
-        </Box>
-    );
+  position: 'fixed',
+  bottom: '20px',
+  right: '20px',
 };
+
+const ToggleTop = () => (
+  <Box sx={toggleTopStyle}>
+    <HashLink id='topToggle' to='/home#home'><NavigationIcon color='warning'></NavigationIcon></HashLink>
+  </Box>
+);
 
 export default ToggleTop;

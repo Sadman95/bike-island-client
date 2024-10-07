@@ -1,12 +1,22 @@
-import React from "react";
-import Contact from "../../components/home/Contact";
-import Header from "../../components/home/Header";
-import Services from "../../components/home/Services";
-import useAuth from "../../hooks/useAuth";
-import About from "../../components/home/about";
-import Reviews from "../../components/home/reviews";
-import Products from "../../components/home/Products";
-import ToggleTop from "../../components/home/toggle-top";
+import React from 'react';
+import Header from '../../components/home/header';
+import Services from '../../components/home/services';
+import useAuth from '../../hooks/useAuth';
+import About from '../../components/home/about';
+import Reviews from '../../components/home/reviews';
+import Products from '../../components/home/products';
+import Offers from '../../components/home/offers';
+import ToggleTop from '../../components/home/toggle-top';
+import Contact from '../../components/home/contact';
+import BottomFabs from '../../components/fabs/bottom-fabs';
+import { BottomFabsActions } from '../../components/constants';
+import StepperSlider from '../../components/slider/stepper-slider';
+import { Container } from '@mui/material';
+import MultiSlider from '../../components/slider/multi-slider';
+import Featured from '../../components/home/featured';
+import Brands from '../../components/home/brands';
+import Footer from '../../components/shared/footer';
+
 
 const Home = () => {
   const { isLoading } = useAuth();
@@ -14,22 +24,27 @@ const Home = () => {
   if (isLoading) {
     return (
       <img
-          style={{ margin: "auto", display: "table" }}
-          src="https://i.ibb.co/R2tS1bh/graphloader.gif"
-          alt="preloader"
-        />
+        style={{ margin: 'auto', display: 'table' }}
+        src="https://i.ibb.co/R2tS1bh/graphloader.gif"
+        alt="preloader"
+      />
     );
   }
 
   return (
     <div id="home">
-      <Header></Header>
-      <Services></Services>
-      <About></About>
-      <Products></Products>
-      <Reviews></Reviews>
-      <Contact></Contact>
-      <ToggleTop></ToggleTop>
+      <Header />
+      <Services />
+      <About />
+      <Products />
+      <Offers />
+      <Featured />
+      <Brands />
+		  {/* <Reviews /> */}
+      <Contact />
+		  <Footer />
+      <ToggleTop />
+      <BottomFabs orientation="vertical" actions={BottomFabsActions()} />
     </div>
   );
 };

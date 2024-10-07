@@ -5,16 +5,16 @@ import {
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
-} from "firebase/auth";
-import { useEffect, useState } from "react";
-import swal from "sweetalert";
-import { baseUrl } from "../../backend/api";
-import initAuthentication from "../../utils/firebase/firebase.init";
+} from 'firebase/auth';
+import { useEffect, useState } from 'react';
+import swal from 'sweetalert';
+import { baseUrl } from '../../backend/api';
+import initAuthentication from '../../utils/firebase/firebase.init';
 initAuthentication();
 
 const useFirebase = () => {
   const [user, setUser] = useState({});
-  const [authError, setAuthError] = useState("");
+  const [authError, setAuthError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [admin, setAdmin] = useState(false);
 
@@ -36,23 +36,23 @@ const useFirebase = () => {
       .finally(() => {
         setIsLoading(false);
       });
-    setAuthError("");
+    setAuthError('');
   };
 
   /* save user to DB */
   const saveUser = (name, email) => {
     const user = { name: name, email: email };
     fetch(`${baseUrl}/users`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "content-type": "application/json",
+        'content-type': 'application/json',
       },
       body: JSON.stringify(user),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.insertedId) {
-          swal("Great!", "You are saved successfully!", "success");
+          swal('Great!', 'You are saved successfully!', 'success');
         }
       });
   };
@@ -86,7 +86,7 @@ const useFirebase = () => {
       .finally(() => {
         setIsLoading(false);
       });
-    setAuthError("");
+    setAuthError('');
   };
 
   /* log out user */
