@@ -1,10 +1,10 @@
-import { Container, Grid } from "@mui/material";
-import { Box } from "@mui/system";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import React, { useEffect, useState } from "react";
-import { baseUrl } from "../../../backend/api";
-import Service from "../service";
+import { Container, Grid } from '@mui/material';
+import { Box } from '@mui/system';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import React, { useEffect, useState } from 'react';
+import { baseUrl } from '../../../backend/api';
+import Service from '../service';
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -23,7 +23,7 @@ const Services = () => {
       .then((res) => res.json())
       .then((data) => setServices(data));
     
-    return () => setServices([])
+    return () => setServices([]);
   }, []);
   return (
     <div id="services" data-aos="fade-down">

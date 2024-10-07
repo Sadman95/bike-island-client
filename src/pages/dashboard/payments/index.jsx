@@ -1,12 +1,10 @@
 import { Typography } from '@mui/material';
 import React from 'react';
 
-const Payments = () => {
-    return (
-        <Typography mt='24px' variant='h6' color='crimson'>
+const Payments = () => (
+  <Typography mt='24px' variant='h6' color='crimson'>
             Not Available NOW
-        </Typography>
-    );
-};
+  </Typography>
+);
 
 export default Payments;

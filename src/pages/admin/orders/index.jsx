@@ -8,10 +8,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import swal from "sweetalert";
-import { baseUrl } from "../../../backend/api";
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import swal from 'sweetalert';
+import { baseUrl } from '../../../backend/api';
 
 const AllOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -29,7 +29,7 @@ const AllOrders = () => {
     fetch(`${baseUrl}/orders/${id}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.status === "pending") {
+        if (data.status === 'pending') {
           updateStatus(id, data);
         }
       });
@@ -37,9 +37,9 @@ const AllOrders = () => {
 
   const updateStatus = (id, data) => {
     fetch(`${baseUrl}/orders/${id}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "content-type": "application/json",
+        'content-type': 'application/json',
       },
       body: JSON.stringify(data),
     })
@@ -55,13 +55,13 @@ const AllOrders = () => {
   /* delete */
   const deleteOrder = (id) => {
     fetch(`${baseUrl}/allOrders/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.deletedCount === 1) {
-          swal("Are you sure you want to do this?", {
-            buttons: ["No!", "Yes!"],
+          swal('Are you sure you want to do this?', {
+            buttons: ['No!', 'Yes!'],
           });
           setRemove(true);
           const restOrders = orders.filter((order) => order._id !== id);
@@ -90,7 +90,7 @@ const AllOrders = () => {
             {orders.map((row) => (
               <TableRow
                 key={row._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   {row._id}

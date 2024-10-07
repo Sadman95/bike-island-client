@@ -1,13 +1,13 @@
-import { CardActionArea, Grid } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import React from "react";
-import { useForm } from "react-hook-form";
-import swal from "sweetalert";
-import { baseUrl } from "../../../backend/api";
-import useAuth from "../../../hooks/useAuth";
+import { CardActionArea, Grid } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import swal from 'sweetalert';
+import { baseUrl } from '../../../backend/api';
+import useAuth from '../../../hooks/useAuth';
 
 const ReviewCard = ({ order }) => {
   const { image, title } = order;
@@ -19,16 +19,16 @@ const ReviewCard = ({ order }) => {
     data.imgUrl = image;
     data.title = title;
     fetch(`${baseUrl}/reviews`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "content-type": "application/json",
+        'content-type': 'application/json',
       },
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.insertedId) {
-          swal("Hello!", "...review is added!");
+          swal('Hello!', '...review is added!');
         }
       });
 
@@ -45,23 +45,23 @@ const ReviewCard = ({ order }) => {
             image={image}
             alt="orderImg"
           />
-          <CardContent sx={{ textAlign: "center" }}>
+          <CardContent sx={{ textAlign: 'center' }}>
             <Typography gutterBottom variant="h5" component="div">
               {title}
             </Typography>
 
             <form onSubmit={handleSubmit(onSubmit)}>
               <textarea
-                style={{ display: "block", width: "100%" }}
+                style={{ display: 'block', width: '100%' }}
                 placeholder="Give your review"
-                {...register("reviewMsg")}
+                {...register('reviewMsg')}
               />
               <br />
               <input
-                style={{ display: "block", width: "100%" }}
+                style={{ display: 'block', width: '100%' }}
                 type="number"
                 placeholder="Rating out of 5"
-                {...register("rating", { maxLength: 1 })}
+                {...register('rating', { maxLength: 1 })}
               />
               <br />
               <br />
