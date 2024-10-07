@@ -3,16 +3,8 @@ import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import React from 'react';
 
-import { CreditCard, Payment } from '@mui/icons-material';
-import {
-  Container,
-  Divider,
-  Grid,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-} from '@mui/material';
+import { CreditCard } from '@mui/icons-material';
+import { Container, Divider, Grid, IconButton, List, ListItem, ListItemText } from '@mui/material';
 import Visa from '../../svg/Visa';
 
 const footerSections = [
@@ -26,15 +18,9 @@ const footerSections = [
   },
   {
     title: 'Policies',
-    items: [
-      'Privacy Policy',
-      'Terms of Service',
-      'Return Policy',
-      'Shipping Info',
-    ],
+    items: ['Privacy Policy', 'Terms of Service', 'Return Policy', 'Shipping Info'],
   },
 ];
-
 
 const socialIcons = [
   { Icon: Facebook, link: 'https://facebook.com' },
@@ -60,18 +46,18 @@ const Footer = () => (
         <Grid item xs={12} sm={4}>
           <img height={100} width={100} src="logo.jpg" alt="Logo" />
           <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-							Your one-stop shop for all things cycling.
+            Your one-stop shop for all things cycling.
           </Typography>
         </Grid>
         {footerSections.map((section) => (
-          <Grid item xs={12} sm={2}  key={section.title}>
+          <Grid item xs={12} sm={2} key={section.title}>
             <Typography fontWeight={'bold'} variant="h6" color="text.primary" gutterBottom>
               {section.title}
             </Typography>
             <List>
               {section.items.map((item) => (
                 <ListItem key={item} disablePadding>
-                  <ListItemText primary={item} sx={{ color: 'text.secondary' }}/>
+                  <ListItemText primary={item} sx={{ color: 'text.secondary' }} />
                 </ListItem>
               ))}
             </List>
@@ -79,15 +65,10 @@ const Footer = () => (
         ))}
         <Grid item xs={12} sm={2}>
           <Typography variant="body1" color="text.secondary" gutterBottom>
-							Follow Us
+            Follow Us
           </Typography>
           {socialIcons.map(({ Icon, link }) => (
-            <IconButton
-              key={link}
-              href={link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <IconButton key={link} href={link} target="_blank" rel="noopener noreferrer">
               <Icon />
             </IconButton>
           ))}
@@ -97,13 +78,16 @@ const Footer = () => (
       <Grid container justifyContent="space-between" alignItems="flex-start">
         <Grid item>
           <Typography variant="body2" color="text.secondary">
-							© {new Date().getFullYear()} Your Company Name. All rights
-							reserved.
+            © {new Date().getFullYear()} Your Company Name. All rights reserved.
           </Typography>
         </Grid>
         <Grid item>
-          <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            We accept:
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+          >
+            We accept:
             <Box>
               {paymentIcons.map((Icon, index) => (
                 <Icon key={index} sx={{ ml: 1 }} />

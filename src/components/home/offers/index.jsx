@@ -1,6 +1,6 @@
 import React from 'react';
 import { offers } from '../../../backend/_mockdata';
-import { Container, Grid, Stack, Typography } from '@mui/material';
+import { Container, Grid, Typography } from '@mui/material';
 import OfferCard from '../../cards/offer-card';
 const Offers = () => (
   <Container maxWidth="xl" sx={{ mt: 28 }}>

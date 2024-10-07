@@ -1,14 +1,9 @@
 import js from '@eslint/js';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
-const ignorePatterns = [
-  '**/node_modules/**',
-  '**/build/**',
-  '**/dist/**',
-];
-
-
+const ignorePatterns = ['**/node_modules/**', '**/build/**', '**/dist/**'];
 
 export default [
   {
@@ -20,6 +15,7 @@ export default [
     plugins: {
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
+      'unused-imports': unusedImports,
     },
     languageOptions: {
       parserOptions: {
@@ -48,7 +44,7 @@ export default [
       'prefer-const': 'error',
       'arrow-body-style': ['error', 'as-needed'],
       'object-curly-spacing': ['error', 'always'],
-
+      'unused-imports/no-unused-imports': 'error',
       // Enforce consistent indentation (2 spaces)
       indent: ['error', 2, { SwitchCase: 1 }],
 
@@ -59,7 +55,7 @@ export default [
       semi: ['error', 'always'],
 
       // Enforce consistent line endings (LF)
-      'linebreak-style': ['error', 'unix'],
+      'linebreak-style': ['error', 'windows'],
     },
     settings: {
       react: {
@@ -68,4 +64,3 @@ export default [
     },
   },
 ];
-

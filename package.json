@@ -80,6 +80,7 @@
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-storybook": "^0.9.0",
+    "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^15.10.0",
     "prop-types": "15.8.1",
     "react-refresh": "^0.14.2",

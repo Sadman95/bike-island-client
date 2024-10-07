@@ -1,13 +1,12 @@
-import { Box, Button, CircularProgress, Container, Grid, Skeleton, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, Skeleton, Stack, Typography } from '@mui/material';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { baseUrl } from '../../../backend/api';
-import Product from '../product';
 import ProductCard from '../../cards/product-card';
 import { StyledOverlayCard } from '../../styled';
-import { Favorite, ShoppingCart } from '@mui/icons-material';
+import { Favorite } from '@mui/icons-material';
 
 const Products = () => {
   const [products, setProducts] = useState([]);

@@ -20,7 +20,6 @@ import NotFound from './pages/not-found/NotFound';
 import PrivateRoute from './pages/private-route';
 import Products from './pages/products';
 import Purchase from './pages/purchase';
-import Footer from './components/shared/footer';
 import Navigation from './components/shared/navigation';
 import LogIn from './pages/login';
 import Register from './pages/register';
