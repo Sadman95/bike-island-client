@@ -1,4 +1,5 @@
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {
   Badge,
   Box,
@@ -9,10 +10,9 @@ import {
   useScrollTrigger,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import useAuth from '../../../hooks/useAuth';
-import { useCart } from '../../../hooks/useCart';
 import PersistentDrawerRight from '../../drawers/persistant-drawer';
 import { data } from './data';
 
@@ -27,6 +27,8 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { StyledTypography } from '../../styled';
+import useCart from '../../../hooks/useCart';
+import useWishlist from '../../../hooks/useWishlist';
 
 // elevation
 function ElevationScroll(props) {
@@ -71,7 +73,12 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const Navigation = (props) => {
   const [open, setOpen] = useState(false);
-  const { cart } = useCart();
+  const navigate = useNavigate();
+  const { cart } = useCart() || {};
+  const { wishlist } = useWishlist() || {};
+  
+  const cartItemCount = cart?.items?.reduce((total, item) => total + item.quantity, 0) || 0;
+  const wishlistItemCount = wishlist?.items?.length || 0;
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -90,10 +97,14 @@ const Navigation = (props) => {
     setAnchorEl(null);
   };
 
+  const handleWishlist = () => {
+    navigate('/wishlist');
+  };
+
   return (
     <ElevationScroll {...props}>
       <AppBar color="theme.palette.common.black" position="fixed">
-        <PersistentDrawerRight open={open} setOpen={setOpen} data={cart} />
+        {cart && <PersistentDrawerRight open={open} setOpen={setOpen} data={cart} />}
         <Container maxWidth="lg">
           <Toolbar disableGutters>
             <StyledTypography
@@ -109,7 +120,7 @@ const Navigation = (props) => {
                 textDecoration: 'none',
               }}
             >
-							Bike Island
+              Bike Island
             </StyledTypography>
 
             {isMobile ? (
@@ -167,18 +178,23 @@ const Navigation = (props) => {
             )}
 
             <Box sx={{ flexGrow: 0 }}>
+              <IconButton aria-label="wishlist" onClick={handleWishlist} disabled={wishlistItemCount === 0}>
+                <StyledBadge badgeContent={wishlistItemCount} color="error">
+                  <FavoriteBorderIcon />
+                </StyledBadge>
+              </IconButton>
               <IconButton aria-label="cart" onClick={handleDrawerOpen}>
-                <StyledBadge badgeContent={cart.length} color="secondary">
+                <StyledBadge badgeContent={cartItemCount} color="secondary">
                   <ShoppingCartIcon />
                 </StyledBadge>
               </IconButton>
               {user?.email ? (
                 <Button color="inherit" onClick={logOut}>
-									Logout
+                  Logout
                 </Button>
               ) : (
                 <Button color="inherit" component={Link} to="/login">
-									Login
+                  Login
                 </Button>
               )}
             </Box>

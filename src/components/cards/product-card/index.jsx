@@ -9,13 +9,13 @@ import {
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../../styles/product.module.css';
-import { useCart } from '../../../hooks/useCart';
+import useCart from '../../../hooks/useCart';
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const { _id, productImg, productTitle, productDesc, productPrice } = product;
   const theme = useTheme(); 
-  const { dispatch } = useCart();
+  const { dispatch } = useCart() || {};
 
   const handlePurchase = (id) => {
     navigate(`/products/${id}`);

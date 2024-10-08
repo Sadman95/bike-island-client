@@ -1,17 +1,17 @@
 import React, { createContext, useReducer } from 'react';
 
-// Create the Cart Context
-export const CartContext = createContext();
+// Create the Wishlist Context
+export const WishlistContext = createContext();
 
-// Initial state of the cart
+// Initial state of the wishlist
 const initialState = {
   items: [],
 };
 
-// Reducer function to manage cart actions
-const cartReducer = (state, action) => {
+// Reducer function to manage wishlist actions
+const wishlistReducer = (state, action) => {
   switch (action.type) {
-    case 'ADD_TO_CART': {
+    case 'ADD_TO_WISHLIST': {
       const existingProduct = state.items.find((item) => item._id === action.payload._id);
       if (existingProduct) {
         return {
@@ -26,7 +26,7 @@ const cartReducer = (state, action) => {
         items: [...state.items, { ...action.payload, quantity: 1 }],
       };
     }
-    case 'REMOVE_FROM_CART':
+    case 'REMOVE_FROM_WISHLIST':
       return {
         ...state,
         items: state.items.filter((item) => item._id !== action.payload._id),
@@ -36,11 +36,15 @@ const cartReducer = (state, action) => {
   }
 };
 
-// CartProvider to wrap the app with the context
-const CartProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(cartReducer, initialState);
+// WishlistProvider to wrap the app with the context
+const WishlistProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(wishlistReducer, initialState);
 
-  return <CartContext.Provider value={{ cart: state, dispatch }}>{children}</CartContext.Provider>;
+  return (
+    <WishlistContext.Provider value={{ wishlist: state, dispatch }}>
+      {children}
+    </WishlistContext.Provider>
+  );
 };
 
-export default CartProvider;
+export default WishlistProvider;

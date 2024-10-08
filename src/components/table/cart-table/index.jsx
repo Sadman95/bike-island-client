@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useCart } from '../../../hooks/useCart';
+import useCart from '../../../hooks/useCart';
 
 const TAX_RATE = 0.07;
 
@@ -33,7 +33,7 @@ function subtotal(items) {
 
 export default function CartTable() {
 
-  const { cart } = useCart();
+  const { cart } = useCart() || {};
 
   const rows = cart.items.map((item) =>
     createRow(item.productTitle, item.quantity, item.productPrice)
