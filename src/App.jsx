@@ -24,6 +24,7 @@ import Navigation from './components/shared/navigation';
 import LogIn from './pages/login';
 import Register from './pages/register';
 import Wishlist from './pages/wishlist';
+import BreadcrumbLayout from './layouts/breadcrumd-layout';
 const App = () => {
   const [visible, setVisible] = useState(true);
   const { user } = useAuth();
@@ -52,8 +53,16 @@ const App = () => {
         <Routes>
           <Route path={'/'} element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/products" element={
+            <BreadcrumbLayout>
+              <Products />
+            </BreadcrumbLayout>
+          } />
+          <Route path="/wishlist" element={
+            <BreadcrumbLayout>
+              <Wishlist />
+            </BreadcrumbLayout>
+          } />
 
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<LogIn />} />

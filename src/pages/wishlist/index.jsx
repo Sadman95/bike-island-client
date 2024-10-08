@@ -1,11 +1,11 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { Box, Container, Grid, Skeleton, Stack, Typography } from '@mui/material';
+import { Box, Container, Grid, Skeleton } from '@mui/material';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import React, { useEffect, useState } from 'react';
-import useWishlist from '../../hooks/useWishlist';
-import { StyledOverlayCard } from '../../components/styled';
 import ProductCard from '../../components/cards/product-card';
+import { StyledOverlayCard } from '../../components/styled';
+import useWishlist from '../../hooks/useWishlist';
 
 const Wishlist = () => {
   const { wishlist, dispatch } = useWishlist() || {};
@@ -34,11 +34,6 @@ const Wishlist = () => {
 
   return (
     <Container maxWidth="xl" sx={{ mt: 28, textAlign: 'center' }}>
-      <Stack direction="row" spacing={2} mb={10} justifyContent="space-between">
-        <Typography fontWeight="bold" textAlign="center" variant="h4" component="div">
-          Wishlist&nbsp;[{wishlist?.items.length}]
-        </Typography>
-      </Stack>
       <Grid container spacing={2} mb={2}>
         {wishlistItems.map((product) => (
           <Grid item xs={12} sm={6} md={4} key={product._id}>

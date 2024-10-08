@@ -29,6 +29,7 @@ import PropTypes from 'prop-types';
 import { StyledTypography } from '../../styled';
 import useCart from '../../../hooks/useCart';
 import useWishlist from '../../../hooks/useWishlist';
+import { useLocation } from 'react-router-dom';
 
 // elevation
 function ElevationScroll(props) {
@@ -76,6 +77,7 @@ const Navigation = (props) => {
   const navigate = useNavigate();
   const { cart } = useCart() || {};
   const { wishlist } = useWishlist() || {};
+  const location = useLocation();
   
   const cartItemCount = cart?.items?.reduce((total, item) => total + item.quantity, 0) || 0;
   const wishlistItemCount = wishlist?.items?.length || 0;
@@ -98,12 +100,16 @@ const Navigation = (props) => {
   };
 
   const handleWishlist = () => {
-    navigate('/wishlist');
+    navigate('/wishlist', {
+      state: {
+        from: location.pathname,
+      },
+    });
   };
 
   return (
     <ElevationScroll {...props}>
-      <AppBar color="theme.palette.common.black" position="fixed">
+      <AppBar color="theme.palette.common.black" position="fixed" id="app-bar">
         {cart && <PersistentDrawerRight open={open} setOpen={setOpen} data={cart} />}
         <Container maxWidth="lg">
           <Toolbar disableGutters>
@@ -155,7 +161,7 @@ const Navigation = (props) => {
                       key={item.title}
                       onClick={handleClose}
                       component={HashLink}
-                      to={'#' + item.hashValue}
+                      to={'/home#' + item.hashValue}
                     >
                       {item.title}
                     </MenuItem>
@@ -168,7 +174,7 @@ const Navigation = (props) => {
                   <Button
                     key={item.title}
                     component={HashLink}
-                    to={'#' + item.hashValue}
+                    to={'/home#' + item.hashValue}
                     sx={{ my: 2, color: 'black', display: 'block' }}
                   >
                     {item.title}
@@ -178,7 +184,7 @@ const Navigation = (props) => {
             )}
 
             <Box sx={{ flexGrow: 0 }}>
-              <IconButton aria-label="wishlist" onClick={handleWishlist} disabled={wishlistItemCount === 0}>
+              <IconButton aria-label="wishlist" onClick={handleWishlist} disabled={wishlistItemCount === 0 || location.pathname.includes('wishlist')}>
                 <StyledBadge badgeContent={wishlistItemCount} color="error">
                   <FavoriteBorderIcon />
                 </StyledBadge>

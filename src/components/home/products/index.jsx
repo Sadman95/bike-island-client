@@ -8,6 +8,7 @@ import ProductCard from '../../cards/product-card';
 import { StyledOverlayCard } from '../../styled';
 import { Favorite } from '@mui/icons-material';
 import useWishlist from '../../../hooks/useWishlist';
+import { useLocation } from 'react-router-dom';
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,9 +25,13 @@ const Products = () => {
   }, []);
 
   const navigate = useNavigate();
-
+  const location = useLocation();
   const goToStore = () => {
-    navigate('/products');
+    navigate('/products', {
+      state: {
+        from: location.pathname,
+      },
+    });
   };
 
   // handle wishlist:
