@@ -12,7 +12,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { styled, useTheme } from '@mui/material/styles';
 import * as React from 'react';
-import { useCart } from '../../../hooks/useCart';
+import useCart from '../../../hooks/useCart';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
@@ -43,7 +43,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function PersistentDrawerRight({ open, setOpen, data }) {
   const theme = useTheme();
-  const { dispatch } = useCart();
+  const { dispatch } = useCart() || {};
   const [isDragging, setIsDragging] = React.useState(false);
   const [drawerWidth, setDrawerWidth] = React.useState(300); // Start with a default width of 300px
 

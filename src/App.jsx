@@ -23,9 +23,8 @@ import Purchase from './pages/purchase';
 import Navigation from './components/shared/navigation';
 import LogIn from './pages/login';
 import Register from './pages/register';
-
+import Wishlist from './pages/wishlist';
 const App = () => {
-  const [cart, setCart] = useState([]);
   const [visible, setVisible] = useState(true);
   const { user } = useAuth();
   const location = useLocation();
@@ -49,11 +48,12 @@ const App = () => {
           flex: 1,
         }}
       >
-        {visible && <Navigation cart={cart} />}
+        {visible && <Navigation />}
         <Routes>
           <Route path={'/'} element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/wishlist" element={<Wishlist />} />
 
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<LogIn />} />
@@ -79,7 +79,7 @@ const App = () => {
             </Route>
             <Route
               path={'/products/:id'}
-              element={<Purchase cart={cart} setCart={setCart} />}
+              element={<Purchase />}
             />
           </Route>
 

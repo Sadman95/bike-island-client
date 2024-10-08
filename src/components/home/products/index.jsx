@@ -7,11 +7,13 @@ import { baseUrl } from '../../../backend/api';
 import ProductCard from '../../cards/product-card';
 import { StyledOverlayCard } from '../../styled';
 import { Favorite } from '@mui/icons-material';
-
+import useWishlist from '../../../hooks/useWishlist';
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  
+  const { wishlist, dispatch } = useWishlist() || {};
   //aos init:
 
   useEffect(() => {
@@ -27,9 +29,13 @@ const Products = () => {
     navigate('/products');
   };
 
-  // handle add to favorite:
-  const handleAddToFavorite = (product) => {
-    console.log(product);
+  // handle wishlist:
+  const handleWishlist = (product) => {
+    if (wishlist?.items.some((item) => item._id === product._id)) {
+      dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: product });
+    } else {
+      dispatch({ type: 'ADD_TO_WISHLIST', payload: product });
+    }
   };
 
   useEffect(() => {
@@ -83,8 +89,8 @@ const Products = () => {
                   <Box className="overlay">
                     <Favorite
                       fontSize="large"
-                      sx={{ color: 'white', cursor: 'pointer' }}
-                      onClick={() => handleAddToFavorite(product)}
+                      sx={{ color: wishlist?.items.some((item) => item._id === product._id) ? 'red' : 'white', cursor: 'pointer' }}
+                      onClick={() => handleWishlist(product)}
                     />
                   </Box>
                   <ProductCard product={product}></ProductCard>
