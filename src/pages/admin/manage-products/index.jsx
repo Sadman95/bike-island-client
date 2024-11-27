@@ -1,107 +1,227 @@
-import {
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { AddBox } from '@mui/icons-material';
+import { Box, IconButton, Stack, Tooltip } from '@mui/material';
+import { useCycles, useDeleteBulkCycles, useDeleteCycle } from 'api/hooks';
+import Preloader from 'components/custom/Preloader';
+import PersistentDrawer from 'components/drawers/persistant-drawer';
+import ProductDetails from 'components/product-details';
+import DataTable from 'components/table/data-table';
+import { NOTIFICATION, ROLES } from 'enums';
+import AddProduct from 'forms/add-product';
+import { socket } from 'helpers/socket';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { connect, useDispatch } from 'react-redux';
+import { addNotification } from 'redux/notification.reducer';
+import { selectCurrentUser } from 'redux/selector';
+import { createStructuredSelector } from 'reselect';
 import swal from 'sweetalert';
-import { baseUrl } from '../../../backend/api';
-import ManageModal from '../../../components/modals/manage-modal';
 
-const ManageProducts = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+/**
+ * ========================================
+ * ManageProducts - manage products page
+ * ========================================
+ */
+const ManageProducts = ({ currentUser }) => {
+  const [appBarHeight, setAppBarHeight] = useState(0);
+  const [cycles, setCycles] = useState(null);
+  const [openDrawer, setOpenDrawer] = useState({ type: '', productId: '' });
+  const [filters, setFilters] = useState({ searchTerm: '', selectedFields: [] });
+  const [sortOrder, setSortOrder] = useState('desc');
+  const [sortBy, setSortBy] = useState('createdAt');
 
-  const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
+
+  const { data, isPending, isSuccess, isError, error, refetch } = useCycles({
+    sortBy,
+    sortOrder,
+    searchTerm: filters.searchTerm,
+  });
+
+  const {
+    mutate,
+    isPending: isDeleteProductsPending,
+    isError: isDeleteProductsError,
+    error: deleteProductsError,
+    isSuccess: isDeleteProductsSuccess,
+    data: deleteProductsData,
+  } = useDeleteBulkCycles();
+
+  const {
+    mutate: deleteMutate,
+    isPending: isDeleteProductPending,
+    isError: isDeleteProductError,
+    error: deleteProductError,
+    isSuccess: isDeleteProductSuccess,
+    data: deleteProductData,
+  } = useDeleteCycle();
 
   useEffect(() => {
-    fetch(`${baseUrl}/cycles`)
-      .then((res) => res.json())
-      .then((data) => setProducts(data));
-  }, []);
+    if (document.getElementById('app-bar')) {
+      setAppBarHeight(document.getElementById('app-bar').clientHeight);
+    }
+  }, [document]);
 
-  /* product delete */
-  const handleDelete = (id) => {
-    fetch(`${baseUrl}/cycles/${id}`, {
-      method: 'DELETE',
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.deletedCount === 1) {
-          swal('Are you sure you want to delete this?', {
-            buttons: ['No!', 'Yes!'],
-          });
+  useEffect(() => {
+    if (data && isSuccess) {
+      setCycles(data);
+    }
+  }, [data, isSuccess]);
+
+  useEffect(() => {
+    if (currentUser) {
+      socket.on('product-added', (productData) => {
+        if (currentUser.role != ROLES.USER) {
+          dispatch(
+            addNotification({
+              id: productData._id,
+              message: `New product added: Product #${productData._id}`,
+              timestamp: productData.createdAt,
+              read: false,
+              orderId: productData._id,
+              type: NOTIFICATION.CREATE_PRODUCT,
+            }),
+          );
         }
-        const restProducts = products.filter((product) => product._id !== id);
-        setProducts(restProducts);
+        refetch();
       });
+    }
+    return () => {
+      socket.off('product-added');
+    };
+  }, [currentUser, dispatch, refetch]);
+
+  useEffect(() => {
+    if (isDeleteProductsSuccess) {
+      toast.success(deleteProductsData.data.message);
+      refetch();
+    }
+  }, [isDeleteProductsSuccess, deleteProductsData, refetch]);
+
+  const handleDelete = (id) => {
+    swal({
+      title: 'Are you sure?',
+      text: `Are you sure that you want to delete this product-${id}?`,
+      icon: 'warning',
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        deleteMutate(id);
+        socket.emit('delete-product', id);
+      }
+    });
+  };
+
+  const handleBulkDelete = (ids) => {
+    swal({
+      title: 'Are you sure?',
+      text: `Are you sure that you want to delete these products-${ids.join(',')}?`,
+      icon: 'warning',
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        mutate({ ids });
+      }
+    });
+  };
+
+  const handleView = (id) => {
+    setOpenDrawer({ type: 'view', productId: id });
+  };
+
+  const handleAddProduct = () => {
+    setOpenDrawer({ type: 'add', productId: '' });
+  };
+
+  const closeDrawer = () => {
+    setOpenDrawer({ type: '', productId: '' });
   };
 
   return (
-    <div>
-      <TableContainer sx={{ mt: 2 }} component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Product Image</TableCell>
-              <TableCell align="center">Product Title</TableCell>
-              <TableCell align="center">Product Description</TableCell>
-              <TableCell align="center">Product Price($)</TableCell>
-              <TableCell align="center">Action</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.map((row) => (
-              <TableRow
-                key={row._id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  <img width="100px" src={row.productImg} alt="img" />
-                </TableCell>
-                <TableCell align="center">{row.productTitle}</TableCell>
-                <TableCell align="center">{row.productDesc}</TableCell>
-                <TableCell align="center">{row.productPrice}</TableCell>
-                <TableCell align="right">
-                  <Button
-                    sx={{ mb: 1 }}
-                    onClick={handleOpen}
-                    variant="contained"
-                    color="secondary"
-                  >
-                    Update
-                  </Button>
-                  <Button
-                    onClick={() => handleDelete(row._id)}
-                    variant="contained"
-                    color="success"
-                  >
-                    Delete
-                  </Button>
-                  <ManageModal
-                    id={row._id}
-                    image={row.productImg}
-                    name={row.productTitle}
-                    description={row.productDesc}
-                    price={row.productPrice}
-                    open={open}
-                    handleClose={handleClose}
-                  ></ManageModal>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+    <>
+      <Stack
+        bgcolor={(theme) => theme.palette.common.white}
+        position="sticky"
+        zIndex={1000}
+        top={appBarHeight}
+        right={0}
+        direction="row"
+        justifyContent="flex-end"
+        alignItems="center"
+        width="100%"
+        marginLeft="auto"
+        border="1px solid lightgray"
+        spacing={0.5}
+        p={0.5}
+        my={2}
+        borderRadius={1}
+      >
+        <Tooltip title="Add Product">
+          <IconButton onClick={handleAddProduct} sx={{ p: 0 }}>
+            <AddBox />
+          </IconButton>
+        </Tooltip>
+      </Stack>
+      <PersistentDrawer open={openDrawer.type !== ''} onClose={closeDrawer} anchor="right">
+        {openDrawer.type === 'view' && <ProductDetails productId={openDrawer.productId} />}
+        {openDrawer.type === 'add' && <AddProduct onClose={closeDrawer} />}
+      </PersistentDrawer>
+      {isError && (
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          p={16}
+          width="100%"
+          border="1px dashed lightgray"
+          borderRadius={6}
+          fontSize={32}
+        >
+          {error.response?.data.message}
+        </Stack>
+      )}
+      {(isPending || isDeleteProductsPending || isDeleteProductPending) && (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flex: 1,
+            height: '100vh',
+          }}
+        >
+          <Preloader />
+        </Box>
+      )}
+      {cycles && !isError && (
+        <DataTable
+          filters={filters}
+          setFilters={setFilters}
+          title="Products"
+          handleBulkDelete={handleBulkDelete}
+          handleView={handleView}
+          handleDelete={handleDelete}
+          order={sortOrder}
+          setOrder={setSortOrder}
+          orderBy={sortBy}
+          setOrderBy={setSortBy}
+          pagination={cycles.meta.pagination}
+          data={cycles.data.map(({ productImg, productDesc, updatedAt, __v, _id, ...rest }) => ({
+            id: _id,
+            ...rest,
+            createdAt: new Date(rest.createdAt).toLocaleDateString(),
+          }))}
+        />
+      )}
+    </>
   );
 };
 
-export default ManageProducts;
+ManageProducts.propTypes = {
+  currentUser: PropTypes.object,
+};
+
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+});
+
+export default connect(mapStateToProps)(ManageProducts);

@@ -1,10 +1,11 @@
+import { StyledHeader, StyledHeaderContent, StyledTypography } from 'components/styled';
 import React, { useEffect, useState } from 'react';
-import {
-  StyledHeader,
-  StyledHeaderContent,
-  StyledTypography,
-} from '../../styled';
 
+/**
+ * =======
+ * Header
+ * =======
+ */
 const Header = () => {
   const [text, setText] = useState(
     'Ride a Bike or Buy a Bike? Enjoy the Ride with Bike Island!'
@@ -22,7 +23,7 @@ const Header = () => {
       } else {
         currentIndex = 0;
       }
-    }, 100); // Adjust this value to change the speed of the animation
+    }, 100); 
 
     return () => clearInterval(intervalId);
   }, []);

@@ -1,46 +1,53 @@
 import { Container, Grid } from '@mui/material';
 import { Box } from '@mui/system';
-import AOS from 'aos';
 import 'aos/dist/aos.css';
-import React, { useEffect, useState } from 'react';
-import { baseUrl } from '../../../backend/api';
+import { useServices } from 'api/hooks';
+import ServiceSkeleton from 'components/skeletons/service-skeleton';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import Service from '../service';
 
+/**
+ * ========
+ * Services
+ * ========
+ */
 const Services = () => {
-  const [services, setServices] = useState([]);
-
-  //aos init:
-
-  useEffect(() => {
-    AOS.init({
-      duration: 2000,
-    });
-    AOS.refresh();
-  }, []);
+  const [services, setServices] = useState(null);
+  const { data, isPending, isError, error, isSuccess } = useServices();
 
   useEffect(() => {
-    fetch(`${baseUrl}/services`)
-      .then((res) => res.json())
-      .then((data) => setServices(data));
-    
-    return () => setServices([]);
-  }, []);
+    if (isSuccess) {
+      setServices(data.data.data);
+    }
+    if (isError) {
+      toast.error(error.message);
+    }
+  }, [isSuccess, isError]);
+
   return (
-    <div id="services" data-aos="fade-down">
+    <Box
+      id="services"
+      sx={{
+        position: 'relative',
+        zIndex: 999,
+      }}
+    >
       <Container sx={{ mt: -18 }}>
         <Box>
-          <Grid
-            container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
-          >
-            {services.map((service) => (
-              <Service key={service._id} service={service}></Service>
-            ))}
+          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+            {services &&
+              services.map((service, i) =>
+                isPending ? (
+                  <ServiceSkeleton key={i} />
+                ) : (
+                  <Service key={service._id} service={service}></Service>
+                ),
+              )}
           </Grid>
         </Box>
       </Container>
-    </div>
+    </Box>
   );
 };
 

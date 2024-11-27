@@ -1,12 +1,12 @@
 import { Button, Fade, Modal, Typography } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import { Box } from '@mui/system';
-import React from 'react';
+import { baseUrlV2 } from 'config/env';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { selectCurrentUser } from 'redux/selector';
 import swal from 'sweetalert';
-import { baseUrl } from '../../../backend/api';
-import useAuth from '../../../hooks/useAuth';
 
 const style = {
   position: 'absolute',
@@ -24,7 +24,7 @@ const style = {
 const PlaceOrderModal = ({ product, open, handleClose }) => {
   const history = useNavigate();
 
-  const { user } = useAuth();
+  const user = useSelector(selectCurrentUser);
 
   const { productTitle, productPrice, productImg } = product;
 
@@ -39,7 +39,7 @@ const PlaceOrderModal = ({ product, open, handleClose }) => {
     data.title = productTitle;
     data.price = productPrice;
 
-    fetch(`${baseUrl}/orders`, {
+    fetch(`${baseUrlV2}/orders`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -78,11 +78,7 @@ const PlaceOrderModal = ({ product, open, handleClose }) => {
             <br />
             {errors.productPrice && <span>This field is required</span>}
             <br />
-            <input
-              type="text"
-              defaultValue={user.displayName}
-              {...register('userName')}
-            />
+            <input type="text" defaultValue={user.displayName} {...register('userName')} />
             <br />
             <br />
             <input
@@ -101,17 +97,13 @@ const PlaceOrderModal = ({ product, open, handleClose }) => {
             <br />
             {errors.phoneNumber && <span>This field is required</span>}
             <br />
-            <input
-              type="text"
-              placeholder="Address"
-              {...register('address', { required: true })}
-            />
+            <input type="text" placeholder="Address" {...register('address', { required: true })} />
             <br />
             {errors.address && <span>This field is required</span>}
             <br />
 
             <Button type="submit" variant="contained" color="success">
-							Confirm Shipping
+              Confirm Shipping
             </Button>
           </form>
         </Box>

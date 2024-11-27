@@ -1,90 +1,131 @@
-import {
-  Alert,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
-import Paper from '@mui/material/Paper';
-import React, { useEffect, useState } from 'react';
-import { baseUrl } from '../../../backend/api';
-import useAuth from '../../../hooks/useAuth';
+import { Box, Stack } from '@mui/material';
+import { useGetUserOrders } from 'api/hooks';
+import Preloader from 'components/custom/Preloader';
+import PersistentDrawer from 'components/drawers/persistant-drawer';
+import OrderDetails from 'components/order-details';
+import DataTable from 'components/table/data-table';
+import { NOTIFICATION, ROLES } from 'enums';
+import { socket } from 'helpers/socket';
+import { useEffect, useState } from 'react';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { addNotification } from 'redux/notification.reducer';
+import { selectCurrentNotifications, selectCurrentUser } from 'redux/selector';
+import { createStructuredSelector } from 'reselect';
+import { decrypt } from 'utils/decrypt';
 
-const UserOrders = () => {
-  const { user } = useAuth();
-  const [myOrders, setMyOrders] = useState([]);
-  const [remove, setRemove] = useState(false);
+/**
+ * =============================
+ * UserOrders - UserOrders view
+ * =============================
+ */
+const UserOrders = ({ currentUser }) => {
+  const [orders, setOrders] = useState(null);
+  const [open, setOpen] = useState('');
+  const [filters, setFilters] = useState({ searchTerm: '', selectedFields: [] });
+
+  const dispatch = useDispatch();
+  const { notifications, unreadCount } = useSelector(selectCurrentNotifications);
+
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [sortBy, setSortBy] = useState('createdAt');
+
+  const { data, isPending, isSuccess, isError, error, refetch } = useGetUserOrders({
+    user: decrypt(currentUser.id),
+    sortBy,
+    sortOrder,
+  });
 
   useEffect(() => {
-    fetch(`${baseUrl}/orders?email=${user.email}`)
-      .then((res) => res.json())
-      .then((data) => setMyOrders(data));
-  }, [user.email]);
+    if (data && isSuccess) {
+      setOrders(data);
+      refetch();
+    }
+  }, [data, isSuccess]);
 
-  /* delete order */
-  const deleteOrder = (id) => {
-    fetch(`${baseUrl}/orders/${id}`, {
-      method: 'DELETE',
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.deletedCount === 1) {
-          setRemove(true);
-          const restOrders = myOrders.filter((order) => order._id !== id);
-          setMyOrders(restOrders);
+  useEffect(() => {
+    if (currentUser) {
+      socket.on('order-updated', (orderData) => {
+        // Dispatch an action to add the new notification
+        if (currentUser.role != ROLES.USER || decrypt(currentUser.id) == orderData.userId) {
+          dispatch(
+            addNotification({
+              id: orderData._id, // Assuming data contains _id as a unique identifier
+              message: orderData.message,
+              timestamp: orderData.createdAt,
+              read: false,
+              orderId: orderData._id,
+              type: NOTIFICATION.UPDATE_ORDER,
+            }),
+          );
+          refetch();
         }
       });
+    }
+    return () => socket.off('order-updated');
+  }, [currentUser, notifications, unreadCount, data]);
+
+  // handle view order
+  const handleView = (id) => {
+    setOpen(id);
   };
 
   return (
     <>
-      {remove && <Alert severity="info">Product is deleted!</Alert>}
-      {myOrders.length !== 0 ? (
-        <TableContainer sx={{ mt: 2 }} component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Product Image</TableCell>
-                <TableCell align="center">Product Title</TableCell>
-                <TableCell align="center">Product Price</TableCell>
-                <TableCell align="center">Status</TableCell>
-                <TableCell align="center">Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {myOrders.map((row) => (
-                <TableRow
-                  key={row._id}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    <img width="100px" src={row.image} alt="img" />
-                  </TableCell>
-                  <TableCell align="center">{row.title}</TableCell>
-                  <TableCell align="center">${row.price}</TableCell>
-                  <TableCell align="center">{row.status}</TableCell>
-                  <TableCell align="center">
-                    <Button
-                      onClick={() => deleteOrder(row._id)}
-                      variant="contained"
-                      color="error"
-                    >
-											Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        ' '
+      <PersistentDrawer open={open} onClose={() => setOpen('')} anchor="right">
+        {open && <OrderDetails orderId={open} />}
+      </PersistentDrawer>
+      {isError && (
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          p={16}
+          width="100%"
+          border="1px dashed lightgray"
+          borderRadius={6}
+          fontSize={32}
+        >
+          {error.response?.data.message}
+        </Stack>
+      )}
+
+      {isPending && (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flex: 1,
+            height: '100vh',
+          }}
+        >
+          <Preloader />
+        </Box>
+      )}
+      {orders && !isError && (
+        <DataTable
+          filters={filters}
+          setFilters={setFilters}
+          handleView={handleView}
+          order={sortOrder}
+          setOrder={setSortOrder}
+          orderBy={sortBy}
+          setOrderBy={setSortBy}
+          pagination={orders.meta.pagination}
+          data={orders.data.map(({ image, _id, ...rest }) => ({
+            id: _id,
+            ...rest,
+            items: rest.items?.length ? rest.items?.length : 1,
+            createdAt: new Date(rest.createdAt).toLocaleDateString(),
+            user: rest.user.email,
+          }))}
+        />
       )}
     </>
   );
 };
 
-export default UserOrders;
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+});
+
+export default connect(mapStateToProps)(UserOrders);

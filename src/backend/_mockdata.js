@@ -35,25 +35,25 @@ export const featuredCycles = [
     id: 1,
     category: 'Mountain',
     featuredImage:
-			'https://static.vecteezy.com/system/resources/previews/007/286/727/non_2x/mountain-bike-adventure-banner-illustration-vector.jpg',
+      'https://static.vecteezy.com/system/resources/previews/007/286/727/non_2x/mountain-bike-adventure-banner-illustration-vector.jpg',
   },
   {
     id: 2,
     category: 'Hybrid',
     featuredImage:
-			'https://www.firefoxbikes.com/on/demandware.static/-/Sites-firefox-navigation/default/dw03c9ff14/PLPBanner/offers/Monsoon-web-banner-1920x1023.jpg',
+      'https://www.firefoxbikes.com/on/demandware.static/-/Sites-firefox-navigation/default/dw03c9ff14/PLPBanner/offers/Monsoon-web-banner-1920x1023.jpg',
   },
   {
     id: 3,
     category: 'Women',
     featuredImage:
-			'https://th.bing.com/th?id=OIF.b58JAanA7dHc%2fd8WWiIVqQ&rs=1&pid=ImgDetMain',
+      'https://www.herocycles.com/on/demandware.static/-/Sites-HeroCycles-Library/default/dw8518b231/Homepage/NewBanner1/1920x1047-5.jpg',
   },
   {
     id: 4,
     category: 'Geared',
     featuredImage:
-			'https://th.bing.com/th/id/OIP.28BnMrHLlFva3gV96fCDEAHaD4?rs=1&pid=ImgDetMain',
+      'https://www.firefoxbikes.com/on/demandware.static/-/Sites-firefox-navigation/default/dw03bab73e/PLPBanner/categoryPLP/geared/Firefox-Geared-Bike.jpg',
   },
 ];
 

@@ -2,6 +2,11 @@ import { Container, Typography } from '@mui/material';
 import React from 'react';
 import StepperSlider from '../../slider/stepper-slider';
 
+/**
+ * ================
+ * Featured section
+ * ================
+ */
 const Featured = () => (
   <Container maxWidth="xl" sx={{ mt: 28 }}>
     <Typography

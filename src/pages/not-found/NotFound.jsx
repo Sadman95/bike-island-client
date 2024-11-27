@@ -1,18 +1,31 @@
-import { Box } from '@mui/system';
 import React from 'react';
+import { Box, Button, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-
-const notFound = {
-  position: 'absolute',
-  left: '50%',
-  top: '50%',
-  transform: 'translate(-50%, -50%)',
-};
-
-
+/**
+ * ========================================
+ * NotFound - not found page view
+ * ========================================
+ */
 const NotFound = () => (
-  <Box sx={notFound}>
-    <img src="https://i.ibb.co/4TZpw2M/notfound.gif" alt="notFound" />
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: 1,
+      height: '100vh',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 4,
+    }}
+  >
+    <Typography variant="h1" fontWeight={900} fontSize={90}>
+      404
+    </Typography>
+    <Typography variant="h4">Page not found!</Typography>
+    <Link to={'/'}>
+      <Button variant="contained">Go Home</Button>
+    </Link>
   </Box>
 );
 

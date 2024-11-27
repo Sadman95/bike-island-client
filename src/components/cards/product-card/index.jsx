@@ -1,28 +1,35 @@
-import {
-  Button,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-  useTheme,
-} from '@mui/material';
-import React from 'react';
+import { Button, CardActions, CardContent, CardMedia, Typography, useTheme } from '@mui/material';
+import { baseUrlV2 } from 'config/env';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import '../../../styles/product.module.css';
-import useCart from '../../../hooks/useCart';
+import { addToCart } from 'redux/cart.reducer';
+import { selectCurrentUser } from 'redux/selector';
+import 'styles/product.module.css';
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const { _id, productImg, productTitle, productDesc, productPrice } = product;
-  const theme = useTheme(); 
-  const { dispatch } = useCart() || {};
+  const theme = useTheme();
+  const dispatch = useDispatch();
+  const currentUser = useSelector(selectCurrentUser);
 
   const handlePurchase = (id) => {
     navigate(`/products/${id}`);
   };
 
   const handleAddToCart = () => {
-    dispatch({ type: 'ADD_TO_CART', payload: product });
+    if (!currentUser) {
+      navigate('/auth/login', {
+        replace: true,
+      });
+    } else {
+      dispatch(
+        addToCart({
+          token: currentUser.token,
+          product,
+        }),
+      );
+    }
   };
 
   return (
@@ -31,13 +38,13 @@ const ProductCard = ({ product }) => {
         sx={{
           height: '300px',
           width: '100%',
-          objectFit: 'cover',
+          objectFit: 'contain',
           borderRadius: 3,
           border: `1px solid ${theme.palette.grey[300]}`,
         }}
         component="img"
-        height="300"
-        image={productImg}
+        height="300px"
+        image={baseUrlV2 + '/' + productImg}
         alt="green iguana"
       />
       <CardContent>
@@ -53,16 +60,10 @@ const ProductCard = ({ product }) => {
           {productTitle}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {productDesc.slice(0, 18)}
+          {productDesc?.slice(0, 18)}
         </Typography>
-        <Typography
-          fontWeight="medium"
-          gutterBottom
-          variant="h5"
-          component="div"
-          my={4}
-        >
-					${productPrice}
+        <Typography fontWeight="medium" gutterBottom variant="h5" component="div" my={4}>
+          ${productPrice}
         </Typography>
       </CardContent>
       <CardActions
@@ -78,16 +79,32 @@ const ProductCard = ({ product }) => {
           variant="outlined"
           disableElevation
           color="success"
+          sx={{
+            border: '1px solid transparent',
+            '&:hover': {
+              backgroundColor: 'success.main',
+              color: 'white',
+              border: '1px solid transparent',
+            },
+          }}
         >
-					BUY NOW
+          BUY NOW
         </Button>
         <Button
           onClick={handleAddToCart}
           variant="contained"
           disableElevation
           color="error"
+          sx={{
+            border: '1px solid transparent',
+            '&:hover': {
+              backgroundColor: 'white !important',
+              color: 'red !important',
+              border: '1px solid white !important',
+            },
+          }}
         >
-					ADD TO CART
+          ADD TO CART
         </Button>
       </CardActions>
     </>

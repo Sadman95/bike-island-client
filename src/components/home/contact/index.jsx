@@ -17,6 +17,11 @@ const contactBg = {
   minHeight: '400px'
 };
 
+/**
+ * ================
+ * Contacts Section
+ * ================
+ */
 const Contact = () => (
   <div id="contact">
     <Box sx={contactBg}>

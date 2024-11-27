@@ -1,8 +1,13 @@
 import { Box } from '@mui/system';
 import React, { useEffect, useState } from 'react';
-
 import { Fab } from '@mui/material';
 
+
+/**
+ * ============
+ * Bottom Fabs
+ * ============
+ */
 const BottomFabs = ({ orientation = 'horizontal', actions = [] }) => {
   const [hidden, setHidden] = useState(false);
 

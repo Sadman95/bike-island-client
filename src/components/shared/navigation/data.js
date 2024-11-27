@@ -1,4 +1,4 @@
-export const data = [
+export const navLinks = [
   { title: 'Home', hashValue: 'home' },
   { title: 'Services', hashValue: 'services' },
   { title: 'About', hashValue: 'about' },
