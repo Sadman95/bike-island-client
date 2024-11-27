@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import swal from 'sweetalert';
-import { baseUrl } from '../../../backend/api';
+import { baseUrlV2 } from '../../../config/env';
 
 const style = {
   position: 'absolute',
@@ -22,7 +22,7 @@ const style = {
 const ManageModal = ({ id, open, handleClose }) => {
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
-    fetch(`${baseUrl}/cycles/${id}`, {
+    fetch(`${baseUrlV2}/cycles/${id}`, {
       method: 'PUT',
       headers: {
         'content-type': 'application/json',

@@ -1,35 +1,32 @@
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import {
   Badge,
   Box,
   Button,
   Container,
   IconButton,
+  Stack,
   styled,
   useScrollTrigger,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import useAuth from '../../../hooks/useAuth';
-import PersistentDrawerRight from '../../drawers/persistant-drawer';
-import { data } from './data';
 
 import MenuIcon from '@mui/icons-material/Menu';
-import {
-  AppBar,
-  Menu,
-  MenuItem,
-  Toolbar,
-  useMediaQuery,
-  useTheme,
-} from '@mui/material';
+import { AppBar, Menu, MenuItem, Toolbar, useMediaQuery, useTheme } from '@mui/material';
+import PersistentDrawer from 'components/drawers/persistant-drawer';
+import CartList from 'components/list/cart-list';
+import { StyledTypography } from 'components/styled';
+import UserMenu from 'components/user-menu';
 import PropTypes from 'prop-types';
-import { StyledTypography } from '../../styled';
-import useCart from '../../../hooks/useCart';
-import useWishlist from '../../../hooks/useWishlist';
+import { connect, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { clearAllFromCart } from 'redux/cart.reducer';
+import { selectCurrentCart, selectCurrentUser, selectCurrentWishlist } from 'redux/selector';
+import { createStructuredSelector } from 'reselect';
+import { navLinks } from './data';
 
 // elevation
 function ElevationScroll(props) {
@@ -45,21 +42,22 @@ function ElevationScroll(props) {
 
   return children
     ? React.cloneElement(children, {
-      sx: {
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: trigger && 'blur(10px)',
-        transition: 'all 0.3s ease',
-      },
-		  })
+        sx: {
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: trigger && 'blur(10px)',
+          transition: 'all 0.3s ease',
+          padding: '1rem',
+        },
+      })
     : null;
 }
 
 ElevationScroll.propTypes = {
   children: PropTypes.element,
   /**
-	 * Injected by the documentation to work in an iframe.
-	 * You won't need it on your project.
-	 */
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
   window: PropTypes.func,
 };
 
@@ -73,23 +71,27 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const Navigation = (props) => {
-  const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
-  const { cart } = useCart() || {};
-  const { wishlist } = useWishlist() || {};
-  const location = useLocation();
-  
-  const cartItemCount = cart?.items?.reduce((total, item) => total + item.quantity, 0) || 0;
-  const wishlistItemCount = wishlist?.items?.length || 0;
-
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const { user, logOut } = useAuth();
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { cart, currentUser, wishlist } = props;
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!currentUser) {
+      dispatch(clearAllFromCart());
+    }
+  }, [currentUser]);
+
+  const cartItemCount = cart?.reduce((total, item) => total + item.quantity, 0) || 0;
+  const wishlistItemCount = wishlist?.length || 0;
+
+  const handleDrawerOpen = () => {
+    setOpen(!open);
+  };
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -107,108 +109,138 @@ const Navigation = (props) => {
     });
   };
 
-  return (
-    <ElevationScroll {...props}>
-      <AppBar color="theme.palette.common.black" position="fixed" id="app-bar">
-        {cart && <PersistentDrawerRight open={open} setOpen={setOpen} data={cart} />}
-        <Container maxWidth="lg">
-          <Toolbar disableGutters>
-            <StyledTypography
-              variant="h1"
-              noWrap
-              component={Link}
-              to="/home"
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontWeight: 700,
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-            >
-              Bike Island
-            </StyledTypography>
+  // login handler
+  const handleLogin = () => {
+    navigate('/auth/login', {
+      replace: true,
+      state: {
+        from: location.pathname,
+      },
+    });
+  };
 
-            {isMobile ? (
-              <>
-                <IconButton
-                  size="large"
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  onClick={handleMenu}
-                  sx={{ ml: 'auto' }}
-                >
-                  <MenuIcon />
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  {data.map((item) => (
-                    <MenuItem
+  return (
+    <>
+      <ElevationScroll {...props}>
+        <AppBar
+          color="theme.palette.common.black"
+          position="fixed"
+          id="app-bar"
+          sx={{
+            position: 'fixed',
+            zIndex: 0,
+          }}
+        >
+          <Container maxWidth="lg">
+            <Toolbar disableGutters>
+              <StyledTypography
+                variant="h1"
+                noWrap
+                component={Link}
+                to="/home"
+                sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontWeight: 700,
+                  color: 'inherit',
+                  textDecoration: 'none',
+                }}
+              >
+                Bike Island
+              </StyledTypography>
+
+              {isMobile ? (
+                <>
+                  <IconButton
+                    size="large"
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    onClick={handleMenu}
+                    sx={{ ml: 'auto' }}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'right',
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    {navLinks.map((item) => (
+                      <MenuItem
+                        key={item.title}
+                        onClick={handleClose}
+                        component={HashLink}
+                        to={'/home#' + item.hashValue}
+                      >
+                        {item.title}
+                      </MenuItem>
+                    ))}
+                  </Menu>
+                </>
+              ) : (
+                <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                  {navLinks.map((item) => (
+                    <Button
                       key={item.title}
-                      onClick={handleClose}
                       component={HashLink}
                       to={'/home#' + item.hashValue}
+                      sx={{ my: 2, color: 'black', display: 'block' }}
                     >
                       {item.title}
-                    </MenuItem>
+                    </Button>
                   ))}
-                </Menu>
-              </>
-            ) : (
-              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                {data.map((item) => (
-                  <Button
-                    key={item.title}
-                    component={HashLink}
-                    to={'/home#' + item.hashValue}
-                    sx={{ my: 2, color: 'black', display: 'block' }}
-                  >
-                    {item.title}
-                  </Button>
-                ))}
-              </Box>
-            )}
-
-            <Box sx={{ flexGrow: 0 }}>
-              <IconButton aria-label="wishlist" onClick={handleWishlist} disabled={wishlistItemCount === 0 || location.pathname.includes('wishlist')}>
-                <StyledBadge badgeContent={wishlistItemCount} color="error">
-                  <FavoriteBorderIcon />
-                </StyledBadge>
-              </IconButton>
-              <IconButton aria-label="cart" onClick={handleDrawerOpen}>
-                <StyledBadge badgeContent={cartItemCount} color="secondary">
-                  <ShoppingCartIcon />
-                </StyledBadge>
-              </IconButton>
-              {user?.email ? (
-                <Button color="inherit" onClick={logOut}>
-                  Logout
-                </Button>
-              ) : (
-                <Button color="inherit" component={Link} to="/login">
-                  Login
-                </Button>
+                </Box>
               )}
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
-    </ElevationScroll>
+
+              <Stack direction={(theme) => (theme.breakpoints.down('md') ? 'column' : 'row')}>
+                <IconButton
+                  aria-label="wishlist"
+                  onClick={handleWishlist}
+                  disabled={wishlistItemCount === 0 || location.pathname.includes('wishlist')}
+                >
+                  <StyledBadge badgeContent={wishlistItemCount} color="error">
+                    <FavoriteBorderIcon />
+                  </StyledBadge>
+                </IconButton>
+                <IconButton aria-label="cart" onClick={handleDrawerOpen}>
+                  <StyledBadge badgeContent={cartItemCount} color="secondary">
+                    <ShoppingCartIcon />
+                  </StyledBadge>
+                </IconButton>
+                {currentUser ? (
+                  <UserMenu />
+                ) : (
+                  <Button color="inherit" onClick={handleLogin}>
+                    Login
+                  </Button>
+                )}
+              </Stack>
+            </Toolbar>
+          </Container>
+        </AppBar>
+      </ElevationScroll>
+      <PersistentDrawer open={open} setOpen={setOpen}>
+        <CartList />
+      </PersistentDrawer>
+    </>
   );
 };
 
-export default Navigation;
+const mapStateToProps = createStructuredSelector({
+  cart: selectCurrentCart,
+  currentUser: selectCurrentUser,
+  wishlist: selectCurrentWishlist,
+});
+
+export default connect(mapStateToProps)(Navigation);

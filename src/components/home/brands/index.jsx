@@ -2,7 +2,11 @@ import { Container, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import MultiSlider from '../../slider/multi-slider';
 
-
+/**
+ * ==============
+ * Brands section
+ * ==============
+ */
 const Brands = () => {
 
   const theme = useTheme();

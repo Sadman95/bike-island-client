@@ -1,47 +1,30 @@
-import * as React from 'react';
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import useCart from '../../../hooks/useCart';
+import { TAX_RATE } from 'constants';
+import { useCartCalculation } from 'hooks/useCartCalculation';
+import { useSelector } from 'react-redux';
+import { selectCurrentCart } from 'redux/selector';
 
-const TAX_RATE = 0.07;
+
 
 function ccyFormat(num) {
   return `${num.toFixed(2)}`;
 }
 
-function priceRow(qty, unit) {
-  return qty * unit;
-}
-
-function createRow(desc, qty, unit) {
-  const price = priceRow(qty, unit);
-  return { desc, qty, unit, price };
-}
-
-function subtotal(items) {
-  return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
-}
-
-
-
 
 
 export default function CartTable() {
+  const cart = useSelector(selectCurrentCart);
 
-  const { cart } = useCart() || {};
-
-  const rows = cart.items.map((item) =>
-    createRow(item.productTitle, item.quantity, item.productPrice)
-  );
-
-  const invoiceSubtotal = subtotal(rows);
-  const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-  const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+  const { rows,
+    invoiceSubtotal,
+    invoiceTaxes,
+    invoiceTotal } = useCartCalculation(cart);
 
   return (
     <TableContainer component={Paper}>
@@ -49,7 +32,7 @@ export default function CartTable() {
         <TableHead>
           <TableRow>
             <TableCell align="center" colSpan={3}>
-							Details
+              Details
             </TableCell>
             <TableCell align="right">Price</TableCell>
           </TableRow>
@@ -76,9 +59,7 @@ export default function CartTable() {
           </TableRow>
           <TableRow>
             <TableCell>Tax</TableCell>
-            <TableCell align="right">{`${(TAX_RATE * 100).toFixed(
-              0
-            )} %`}</TableCell>
+            <TableCell align="right">{`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
             <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
           </TableRow>
           <TableRow>

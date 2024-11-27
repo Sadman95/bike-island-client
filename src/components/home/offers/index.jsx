@@ -2,6 +2,12 @@ import React from 'react';
 import { offers } from '../../../backend/_mockdata';
 import { Container, Grid, Typography } from '@mui/material';
 import OfferCard from '../../cards/offer-card';
+
+/**
+ * =============
+ * Offer section
+ * =============
+ */
 const Offers = () => (
   <Container maxWidth="xl" sx={{ mt: 28 }}>
     <Typography

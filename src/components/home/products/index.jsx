@@ -1,22 +1,35 @@
+import { Favorite } from '@mui/icons-material';
 import { Box, Button, Container, Grid, Skeleton, Stack, Typography } from '@mui/material';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { baseUrl } from '../../../backend/api';
-import ProductCard from '../../cards/product-card';
-import { StyledOverlayCard } from '../../styled';
-import { Favorite } from '@mui/icons-material';
-import useWishlist from '../../../hooks/useWishlist';
-import { useLocation } from 'react-router-dom';
+import { useCycles } from 'api/hooks';
+import ProductCard from 'components/cards/product-card';
+import { StyledOverlayCard } from 'components/styled';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { selectCurrentWishlist } from 'redux/selector';
+import { addToWishlist, removeFromWishlist } from 'redux/wishlist.reducer';
+
+
+/**
+ * ==========================
+ * Products view in home page
+ * ==========================
+ */
 const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(null);
+  const { data, isPending, isSuccess, isError, error } = useCycles({
+    sortBy: 'createdAt',
+    sortOrder: 'desc',
+    limit: 6
+  });
 
-  
-  const { wishlist, dispatch } = useWishlist() || {};
+  const wishlist = useSelector(selectCurrentWishlist);
+  const dispatch = useDispatch();
+
   //aos init:
-
   useEffect(() => {
     AOS.init({
       duration: 2000,
@@ -36,73 +49,61 @@ const Products = () => {
 
   // handle wishlist:
   const handleWishlist = (product) => {
-    if (wishlist?.items.some((item) => item._id === product._id)) {
-      dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: product });
+    if (wishlist?.some((item) => item._id === product._id)) {
+      dispatch(removeFromWishlist(product));
     } else {
-      dispatch({ type: 'ADD_TO_WISHLIST', payload: product });
+      dispatch(addToWishlist(product));
     }
   };
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`${baseUrl}/cycles`)
-      .then((res) => res.json())
-      .then((data) => {
-        setProducts(data);
-      })
-      .finally(() => setLoading(false));
-  },
-  []
-  );
+    if (isSuccess) {
+      setProducts(data.data);
+    }
+    if (isError) {
+      toast.error(error.response.data.message);
+    }
+  }, [isSuccess, isError]);
   return (
     <div id="products">
       <Container maxWidth="xl" sx={{ mt: 28, textAlign: 'center' }}>
-        <Stack
-          direction="row"
-          spacing={2}
-          mb={10}
-          justifyContent="space-between"
-        >
-          <Typography
-            fontWeight="bold"
-            textAlign="center"
-            variant="h4"
-            component="div"
-          >
-						Products
+        <Stack direction="row" spacing={2} mb={10} justifyContent="space-between">
+          <Typography fontWeight="bold" textAlign="center" variant="h4" component="div">
+            Products
           </Typography>
-          <Button
-            onClick={goToStore}
-            variant="contained"
-            color="warning"
-            disableElevation
-          >
-						MORE
+          <Button onClick={goToStore} variant="contained" color="warning" disableElevation>
+            MORE
           </Button>
         </Stack>
         <Grid container spacing={2} mb={2}>
-          {products.slice(0, 6).map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product._id}>
-              {loading ? (
-                <Skeleton variant="rectangular" width="100%" height={500} />
-              ) : (
-                <StyledOverlayCard
-                  sx={{
-                    position: 'relative',
-                  }}
-                >
-                  <Box className="overlay">
-                    <Favorite
-                      fontSize="large"
-                      sx={{ color: wishlist?.items.some((item) => item._id === product._id) ? 'red' : 'white', cursor: 'pointer' }}
-                      onClick={() => handleWishlist(product)}
-                    />
-                  </Box>
-                  <ProductCard product={product}></ProductCard>
-                </StyledOverlayCard>
-              )}
-            </Grid>
-          ))}
+          {products &&
+            products.map((product) => (
+              <Grid item xs={12} sm={6} md={4} key={product._id}>
+                {isPending ? (
+                  <Skeleton variant="rectangular" width="100%" height={500} />
+                ) : (
+                  <StyledOverlayCard
+                    sx={{
+                      position: 'relative',
+                    }}
+                  >
+                    <Box className="overlay">
+                      <Favorite
+                        fontSize="large"
+                        sx={{
+                          color: wishlist?.some((item) => item._id === product._id)
+                            ? 'red'
+                            : 'white',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleWishlist(product)}
+                      />
+                    </Box>
+                    <ProductCard product={product}></ProductCard>
+                  </StyledOverlayCard>
+                )}
+              </Grid>
+            ))}
         </Grid>
       </Container>
     </div>

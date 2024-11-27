@@ -1,187 +1,427 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import { Button } from '@mui/material';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import PropTypes from 'prop-types';
-import * as React from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
-import useAuth from '../../../hooks/useAuth';
-import '../../../styles/dashboard.module.css';
+import { ArrowForward, Delete, Edit, MoreVert, Refresh, Visibility } from '@mui/icons-material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  MenuItem,
+  NativeSelect,
+  Skeleton,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import { useGetStats } from 'api/hooks';
+import ChartCard from 'components/cards/chart-card';
+import StatsCard from 'components/cards/stats-card';
+import _BarChart from 'components/chart/bar-chart';
+import _PieChart from 'components/chart/pie-chart';
+import { spin, StyledMenu } from 'components/styled';
+import { baseUrlV2 } from 'config/env';
+import { MONTHS } from 'constants';
+import { ORDER_STAT } from 'enums';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { connect } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { selectCurrentUser } from 'redux/selector';
+import { createStructuredSelector } from 'reselect';
+import { transformOrdersData, transformUsersData } from 'transformers';
+import { convertToTitleCase } from 'utils/convert-to-title-case';
+import { nearestEqual } from 'utils/nearest-equal';
 
-const drawerWidth = 250;
-
-function Dashboard(props) {
-  const { user, logOut, admin } = useAuth();
+/**
+ * =============================
+ * Dashboard - Dashboard view
+ * =============================
+ */
+const Dashboard = ({ currentUser }) => {
+  const [dashboardData, setDashboardData] = useState(null);
+  const [salesData, setSalesData] = useState(null);
+  const [usersData, setUsersData] = useState(null);
+  const [chartWidth, setChartWidth] = useState(0);
+  const [year, setYear] = useState(null);
+  const chartCardRef = useRef(null);
   const navigate = useNavigate();
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [columns, setColumns] = useState(null);
+  const theme = useTheme();
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
-  React.useEffect(() => {
-    if (user.displayName) {
-      navigate(`/dashboard/${user.displayName}`);
+  const { data, isPending, isSuccess, refetch, isRefetching } = useGetStats();
+
+  const updateChartWidth = useCallback(() => {
+    if (chartCardRef.current) {
+      setChartWidth(chartCardRef.current.clientWidth);
     }
-  }, [user.displayName]);
+  }, [chartCardRef]);
 
-  /* log out */
-  const userLogOut = () => {
-    logOut();
-    navigate('/login', {
-      replace: true,
-    });
-  };
+  useEffect(() => {
+    if (data && isSuccess) {
+      setDashboardData((prevData) => ({
+        ...prevData,
+        ...data.data,
+        sales: {
+          data: data.data.orders.data.filter(
+            (order) => order.paymentId && order.status == ORDER_STAT.APPROVED,
+          ),
+          total: data.data.orders.data.filter(
+            (order) => order.paymentId && order.status == ORDER_STAT.APPROVED,
+          ).length,
+        },
+      }));
+    }
+  }, [isSuccess, data]);
 
-  const drawer = (
-    <div id="drawer">
-      <Toolbar>
-        <Typography color="GrayText" variant="subtitle2" component="div">
-          {user.email}
-        </Typography>
-      </Toolbar>
-      <Divider />
-      <List>
-        <ListItem>
-          <Link to="/home">Home</Link>
-        </ListItem>
-        {admin && (
-          <>
-            <ListItem>
-              <Link to={'/admin/make-admin'}>Make Admin</Link>
-            </ListItem>
-            <ListItem>
-              <Link to={'/admin/allOrders'}>Manage All Orders</Link>
-            </ListItem>
-            <ListItem>
-              <Link to={'/admin/add-product'}>Add Product</Link>
-            </ListItem>
-            <ListItem>
-              <Link to={'/admin/manage-products'}>Manage Products</Link>
-            </ListItem>
-          </>
-        )}
-        {!admin && (
-          <>
-            <ListItem>
-              <Link to={`/dashboard/${user && user.displayName}/orders`}>
-								My Orders
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link to={`/dashboard/${user && user.displayName}/payment`}>
-								Payment
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link to={`/dashboard/${user && user.displayName}/review`}>
-								Review
-              </Link>
-            </ListItem>
-          </>
-        )}
-        <ListItem>
-          <Button onClick={userLogOut} variant="contained" color="warning">
-						Log Out
-          </Button>
-        </ListItem>
-      </List>
-    </div>
+  useEffect(() => {
+    if (dashboardData) {
+      
+      setSalesData(
+        transformOrdersData(
+          dashboardData.orders.data.filter(
+            (order) => order.status == ORDER_STAT.APPROVED
+          ),
+        ),
+      );
+      const transformedUsersData = transformUsersData(dashboardData.users.data);
+      setUsersData(transformedUsersData);
+
+      // Set initial year based on available data
+      const initialYear = nearestEqual(Object.keys(transformedUsersData), new Date().getFullYear());
+      setYear(initialYear);
+
+      // Dynamically create columns based on keys in the data
+
+      let cols = null;
+      if (dashboardData.orders.data.length > 0) {
+        const { _id, image, items, createdAt, __v, ...keys } = dashboardData.orders.data[0];
+        cols = Object.keys(keys).map((key) => ({
+          id: key,
+          label: convertToTitleCase(key), // Capitalize the first letter
+          minWidth: 150,
+          align: 'left', // Example alignment condition
+          format: (value) => `$${value}`,
+        }));
+        setColumns(cols);
+      }
+    }
+  }, [dashboardData]);
+
+  useEffect(() => {
+    updateChartWidth();
+    window.addEventListener('resize', updateChartWidth);
+    return () => window.removeEventListener('resize', updateChartWidth);
+  }, [updateChartWidth, chartWidth, salesData, usersData]);
+
+  const memoizedSalesSeries = useMemo(
+    () =>
+      salesData?.map((v) => {
+        const [year, monthlyTotals] = Object.entries(v)[0];
+        return {
+          data: monthlyTotals,
+          label: year,
+        };
+      }),
+    [salesData],
   );
 
-  const container =
-		window !== undefined ? () => window().document.body : undefined;
+  // Year change handler
+  const handleYearChange = (e) => {
+    setYear(e.target.value);
+  };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {admin ? 'Admin' : user.displayName}'s Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
+    <Box sx={{ minHeight: '100vh', width: '100%' }}>
+      <Stack drirection="row" alignItems="end" justifyContent="flex-end" spacing={1}>
+        <Refresh
+          onClick={() => refetch()}
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: drawerWidth,
+            transition: 'all 0.3s ease',
+            cursor: 'pointer',
+            animation: isRefetching && `${spin} 1s infinite ease`,
+            '&:hover': {
+              backgroundColor: theme.palette.grey[200],
+              borderRadius: 100,
             },
           }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-        }}
-      >
-        <Toolbar />
+        />
+      </Stack>
+      <Grid container spacing={2} my={1}>
+        {isPending
+          ? Array.from({ length: 4 }).map((_, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Skeleton variant="rectangular" height={140} />
+            </Grid>
+          ))
+          : dashboardData &&
+            Object.entries(dashboardData).map(([key, data]) => (
+              <Grid item xs={12} sm={6} md={3} key={key}>
+                <StatsCard
+                  description={`${convertToTitleCase(key)}`}
+                  title={`${convertToTitleCase(key)}`}
+                  percentage={`${data.total / 100}`}
+                  value={data.total}
+                />
+              </Grid>
+            ))}
+      </Grid>
+      <Grid container spacing={2} my={2}>
+        <>
+          {salesData && salesData.length > 0 && (
+            <Grid item xs={12} md={6}>
+              <ChartCard
+                title={
+                  <Typography variant="h6" fontWeight="bold">
+                    Sales Chart
+                  </Typography>
+                }
+                ref={chartCardRef}
+              >
+                <_BarChart
+                  height={500}
+                  width={chartWidth}
+                  series={memoizedSalesSeries}
+                  xAxis={[
+                    {
+                      data: MONTHS.map((m) => m.slice(0, 3)),
+                      scaleType: 'band',
+                    },
+                  ]}
+                />
+              </ChartCard>
+            </Grid>
+          )}
+          {usersData && (
+            <Grid item xs={12} md={6}>
+              <ChartCard
+                title="Users"
+                headerComponent={() => (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      p: 2,
+                    }}
+                  >
+                    <Typography variant="h6" fontWeight="bold">
+                      Users Traffic
+                    </Typography>
+                    <NativeSelect
+                      value={year}
+                      onChange={handleYearChange}
+                      inputProps={{
+                        name: 'year',
+                        id: 'uncontrolled-native',
+                      }}
+                    >
+                      {usersData &&
+                        Object.keys(usersData).map((label) => (
+                          <option key={label} value={label}>
+                            {label}
+                          </option>
+                        ))}
+                    </NativeSelect>
+                  </Box>
+                )}
+                ref={chartCardRef}
+              >
+                <_PieChart width={chartWidth} data={usersData && usersData[String(year)]} />
+              </ChartCard>
+            </Grid>
+          )}
+        </>
+      </Grid>
 
-        <Outlet />
-      </Box>
+      {dashboardData && (
+        <Grid container spacing={2} my={2}>
+          <>
+            {dashboardData.orders.data.length > 0 && (
+              <Grid item xs={12} md={8}>
+                <ChartCard
+                  title={
+                    <Typography variant="h6" fontWeight="bold">
+                      Recent Orders
+                    </Typography>
+                  }
+                  ref={chartCardRef}
+                >
+                  <Box
+                    sx={{
+                      width: '100%',
+                      overflow: 'hidden',
+                      border: '1px solid lightgrey',
+                      borderRadius: 3,
+                    }}
+                  >
+                    <TableContainer sx={{ maxHeight: 440 }}>
+                      <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                          <TableRow>
+                            {columns &&
+                              columns.map(({ _id, image, __V, ...column }) => (
+                                <TableCell
+                                  key={column.id}
+                                  align={column.align}
+                                  style={{ minWidth: column.minWidth }}
+                                >
+                                  {column.label}
+                                </TableCell>
+                              ))}
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {dashboardData.orders.data
+                            // .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                            // .slice(0, 7)
+                            .map(({ image, _id, __v, ...row }) => (
+                              <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                                {columns &&
+                                  columns.map((column) => {
+                                    const value = row[column.id];
+                                    return (
+                                      <TableCell key={column.id} align={column.align}>
+                                        {column.format && typeof value === 'number'
+                                          ? column.format(value)
+                                          : value}
+                                      </TableCell>
+                                    );
+                                  })}
+                              </TableRow>
+                            ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      mt: 1,
+                    }}
+                  >
+                    <Button
+                      onClick={() => {
+                        navigate('/dashboard/manage-orders', {
+                          replace: true,
+                          preventScrollReset: false,
+                        });
+                      }}
+                      endIcon={<ArrowForward />}
+                      sx={{ mt: 2, color: 'text.secondary', textTransform: 'none' }}
+                    >
+                      View all
+                    </Button>
+                  </Box>
+                </ChartCard>
+              </Grid>
+            )}
+            {dashboardData.cycles.data.length > 0 && (
+              <Grid item xs={12} md={4}>
+                <Box
+                  sx={{ p: 2, borderRadius: 2, boxShadow: 1, backgroundColor: 'background.paper' }}
+                >
+                  <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
+                    Latest products
+                  </Typography>
+                  <List>
+                    {dashboardData.cycles.data
+                      // .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                      // .slice(0, 7)
+                      .map((product, index) => (
+                        <Fragment key={product._id}>
+                          <ListItem
+                            secondaryAction={
+                              <IconButton
+                                edge="end"
+                                aria-label="options"
+                                id="demo-customized-button"
+                                aria-controls={open ? 'demo-customized-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                disableElevation
+                                onClick={handleClick}
+                              >
+                                <MoreVert />
+                              </IconButton>
+                            }
+                          >
+                            <StyledMenu
+                              id="demo-customized-menu"
+                              MenuListProps={{
+                                'aria-labelledby': 'demo-customized-button',
+                              }}
+                              anchorEl={anchorEl}
+                              open={open}
+                              onClose={handleClose}
+                            >
+                              <MenuItem onClick={handleClose} disableRipple>
+                                <Edit />
+                                Edit
+                              </MenuItem>
+                              <MenuItem onClick={handleClose} disableRipple>
+                                <Visibility />
+                                View
+                              </MenuItem>
+                              <MenuItem onClick={handleClose} disableRipple>
+                                <Delete />
+                                Delete
+                              </MenuItem>
+                            </StyledMenu>
+                            <ListItemAvatar>
+                              <Avatar
+                                variant="rounded"
+                                src={`${baseUrlV2 + '/' + product.productImg}`}
+                                sx={{ width: 50, height: 50, borderRadius: 1 }}
+                              />
+                            </ListItemAvatar>
+                            <ListItemText
+                              primary={product.productTitle}
+                              secondary={`Added on ${new Date(product.createdAt).toLocaleDateString()}`}
+                              primaryTypographyProps={{ fontWeight: 'medium' }}
+                            />
+                          </ListItem>
+                          {index < dashboardData.cycles.data.length - 1 && <Divider />}
+                        </Fragment>
+                      ))}
+                  </List>
+                  <Button
+                    endIcon={<ArrowForward />}
+                    sx={{ mt: 2, color: 'text.secondary', textTransform: 'none' }}
+                  >
+                    View all
+                  </Button>
+                </Box>
+              </Grid>
+            )}
+          </>
+        </Grid>
+      )}
     </Box>
   );
-}
-
-Dashboard.propTypes = {
-  window: PropTypes.func,
 };
 
-export default Dashboard;
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+});
+
+export default connect(mapStateToProps)(Dashboard);

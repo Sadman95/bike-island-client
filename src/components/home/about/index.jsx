@@ -1,8 +1,8 @@
 import { Box, Container, Grid, Typography } from '@mui/material';
 import React from 'react';
-import aboutImg from '../../../images/about/about.jpg';
-import { styled, keyframes } from '@mui/material/styles';
-import { StyledTypography } from '../../styled';
+import aboutImg from 'assets/images/about/about.jpg';
+import { styled } from '@mui/material/styles';
+import { bounce, moveAround, rotate, StyledTypography } from '../../styled';
 
 
 const aboutStyle = {
@@ -10,12 +10,6 @@ const aboutStyle = {
   alignItems: 'center',
   // padding: 2,
 };
-
-
-const bounce = keyframes`
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
-`;
 
 const CycleContainer = styled(Container)(({ theme }) => ({
   position: 'relative',
@@ -27,74 +21,6 @@ const CycleContainer = styled(Container)(({ theme }) => ({
   boxSizing: 'border-box',
   marginTop: theme.breakpoints.down('md') ? theme.spacing(16) : theme.spacing(28),
 }));
-
-const rotate = keyframes`
-  0% { 
-    transform: translate(0, 0) rotate(0deg);
-  }
-  24.99% { 
-    transform: translate(-100% + 45px, 0) rotate(0deg);
-  }
-  25% {
-    transform: translate(-100% + 45px, 0) rotate(-90deg);
-  }
-  49.99% { 
-    transform: translate(-100% + 45px, -100% + 45px) rotate(-90deg);
-  }
-  50% {
-    transform: translate(-100% + 45px, -100% + 45px) rotate(-180deg);
-  }
-  74.99% { 
-    transform: translate(0, -100% + 45px) rotate(-180deg);
-  }
-  75% {
-    transform: translate(0, -100% + 45px) rotate(-270deg);
-  }
-  100% { 
-    transform: translate(0, 0) rotate(-360deg);
-  }
-`;
-
-
-
-const moveAround = keyframes`
-  0%, 100% { 
-    top: -45px;
-    left: -45px;
-    transform: translate(0, 0) rotate(0deg);
-  }
-  24.99% { 
-    top: -45px;
-    left: calc(100%);
-    transform: translate(-100%, 0) rotate(0deg);
-  }
-  25% {
-    top: -45px;
-    left: calc(100%);
-    transform: translate(-100%, 0) rotate(90deg);
-  }
-  49.99% { 
-    top: calc(100%);
-    left: calc(100%);
-    transform: translate(-100%, -100%) rotate(90deg);
-  }
-  50% {
-    top: calc(100%);
-    left: calc(100%);
-    transform: translate(-100%, -100%) rotate(180deg);
-  }
-  74.99% { 
-    top: calc(100%);
-    left: -45px;
-    transform: translate(0, -100%) rotate(180deg);
-  }
-  75% {
-    top: calc(100%);
-    left: -45px;
-    transform: translate(0, -100%) rotate(270deg);
-  }
-`;
-
 
 const Cycle = styled('div')({
   position: 'absolute',
@@ -117,6 +43,11 @@ const ContentWrapper = styled('div')({
   padding: '20px',
 });
 
+/**
+ * ===============================
+ * Animated cycle in about section
+ * @param {Node} children 
+ */
 const AnimatedCycle = ({ children }) => (
   <CycleContainer maxWidth="lg">
     <Cycle>
@@ -165,7 +96,11 @@ const AnimatedCycle = ({ children }) => (
   </CycleContainer>
 );
 
-
+/**
+ * =============
+ * About Section
+ * =============
+ */
 const About = () => (
   <Box id="about" sx={{ overflow: 'hidden' }}>
     <AnimatedCycle>

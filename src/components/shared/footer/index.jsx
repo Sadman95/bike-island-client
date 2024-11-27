@@ -44,7 +44,7 @@ const Footer = () => (
     <Container maxWidth="lg">
       <Grid container spacing={4} alignItems="start">
         <Grid item xs={12} sm={4}>
-          <img height={100} width={100} src="logo.jpg" alt="Logo" />
+          <img height={100} width={100} src="/logo.jpg" alt="Logo" />
           <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
             Your one-stop shop for all things cycling.
           </Typography>
