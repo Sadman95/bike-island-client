@@ -39,11 +39,11 @@ const Products = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setProducts(data.data.data);
-      setPagination(data.data.meta.pagination);
-      setPriceRange([data.data.meta.minPrice, data.data.meta.maxPrice]);
+      setProducts(data.data);
+      setPagination(data.meta.pagination);
+      setPriceRange([data.meta.minPrice, data.meta.maxPrice]);
       setCategories(
-        data.data.meta.filters.reduce((acc, curr) => {
+        data.meta.filters.reduce((acc, curr) => {
           if (curr && !acc.includes(curr)) {
             acc.push({
               value: curr.toLowerCase(),
