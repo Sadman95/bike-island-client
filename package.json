@@ -3,8 +3,8 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
+  "workspaces":["bike-island-client"],
   "dependencies": {
-    "bike-island-client": "*",
     "@emotion/cache": "^11.13.5",
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
