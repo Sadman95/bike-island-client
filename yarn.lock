@@ -7455,7 +7455,7 @@ __metadata:
   linkType: hard
 
 "bike-island-client@workspace:.":
-  version: 0.0.0-use.local
+  version: 2.0.0-use.local
   resolution: "bike-island-client@workspace:."
   dependencies:
     "-": "npm:^0.0.1"
