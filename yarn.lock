@@ -3908,7 +3908,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/eslintrc@npm:^1.0.2":
+"@eslint/eslintrc@npm:^1.0.3":
   version: 1.4.1
   resolution: "@eslint/eslintrc@npm:1.4.1"
   dependencies:
@@ -9182,7 +9182,7 @@ __metadata:
     dayjs: "npm:^1.11.13"
     env-cmd: "npm:^10.1.0"
     env-template: "npm:^1.0.2"
-    eslint: "npm:8.0.0"
+    eslint: "npm:8.1.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-config-react-app: "npm:^7.0.1"
     eslint-plugin-flowtype: "npm:^8.0.3"
@@ -12341,11 +12341,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.0.0":
-  version: 8.0.0
-  resolution: "eslint@npm:8.0.0"
+"eslint@npm:8.1.0":
+  version: 8.1.0
+  resolution: "eslint@npm:8.1.0"
   dependencies:
-    "@eslint/eslintrc": "npm:^1.0.2"
+    "@eslint/eslintrc": "npm:^1.0.3"
     "@humanwhocodes/config-array": "npm:^0.6.0"
     ajv: "npm:^6.10.0"
     chalk: "npm:^4.0.0"
@@ -12385,7 +12385,7 @@ __metadata:
     v8-compile-cache: "npm:^2.0.3"
   bin:
     eslint: bin/eslint.js
-  checksum: 10c0/46a151f552e8d7719074009608a2ac5ab7dd929b7b19eef52b851d4e239b1427e9a3107318d94240c484ddd158b88b871b5e2cc6f19eb00317da9966ad44e906
+  checksum: 10c0/edeecbe99ae81507c89422ed3b264ce591e6ae5132e10a43e7444d33896ebcd7a09acca5837599446fff2112c7928ea7887cdcf4809a473e24c5f8a19dde16cc
   languageName: node
   linkType: hard
 
