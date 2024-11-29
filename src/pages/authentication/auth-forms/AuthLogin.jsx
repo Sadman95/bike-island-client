@@ -140,7 +140,7 @@ const AuthLogin = ({ ...others }) => {
     if (type === 'user') {
       setDemoCredentials({
         email: 'user@bi.com',
-        password: 'user',
+        password: 'biuser',
       });
     } else if (type === 'admin') {
       setDemoCredentials({
