@@ -51,6 +51,7 @@ const AuthLogin = ({ ...others }) => {
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector(selectCurrentMode);
   const [checked, setChecked] = useState(false);
+  const [demoCredentials, setDemoCredentials] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -98,7 +99,6 @@ const AuthLogin = ({ ...others }) => {
 
   // login with credentials mutation
   const { mutate: loginMutation, isPending: isLoginLoading } = useMutation({
-    // agent1.Authentication.Login
     mutationFn: (data) => agent1.Authentication.Login(data),
     onSuccess: (res) => {
       const { message, data } = res.data;
@@ -118,7 +118,6 @@ const AuthLogin = ({ ...others }) => {
       if (error.response.data.errorMessages.length > 0) {
         error.response.data.errorMessages.map(({ message }) =>
           setTimeout(() => {
-            // toast.error(message, { position: 'top-center' });
             setErrorMessages((prev) => [...prev, message]);
           }, 500),
         );
@@ -127,12 +126,6 @@ const AuthLogin = ({ ...others }) => {
       }
     },
   });
-
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     navigate(redirect_uri);
-  //   }
-  // }, [currentUser]);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
@@ -143,15 +136,27 @@ const AuthLogin = ({ ...others }) => {
     event.preventDefault();
   };
 
-  const css = `
+  const handleDemoLogin = (type) => {
+    if (type === 'user') {
+      setDemoCredentials({
+        email: 'user@bi.com',
+        password: 'user',
+      });
+    } else if (type === 'admin') {
+      setDemoCredentials({
+        email: 'admin@bi.com',
+        password: 'admin',
+      });
+    }
+  };
 
+  const css = `
   .hover\\:text-underline:hover{
     text-decoration: underline;
-    
   }
-    label{
-    color: ${theme.palette.text.disabled}
-}
+  label {
+    color: ${theme.palette.text.disabled};
+  }
   `;
 
   return (
@@ -271,30 +276,53 @@ const AuthLogin = ({ ...others }) => {
             </Grid>
           </Grid>
 
+          <Stack container spacing={1} mb={4}>
+            <Button
+              fullWidth
+              variant="contained"
+              disableElevation
+              color="warning"
+              onClick={() => handleDemoLogin('user')}
+            >
+              Login as Demo User
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              disableElevation
+              color="secondary"
+              onClick={() => handleDemoLogin('admin')}
+            >
+              Login as Demo Admin
+            </Button>
+          </Stack>
+
           <Formik
             initialValues={{
-              email: '',
-              password: '',
+              email: demoCredentials?.email || '',
+              password: demoCredentials?.password || '',
               rememberMe: checked,
             }}
+            enableReinitialize
             validationSchema={Yup.object().shape({
-              email: Yup.string()
-                .email('Must be a valid email')
-                .max(255)
-                .required('Email is required'),
+              email: Yup.string().email('Invalid email').max(255).required('Email is required'),
               password: Yup.string().max(255).required('Password is required'),
-              rememberMe: Yup.boolean().optional(),
             })}
-            onSubmit={(v) => loginMutation(v)}
+            onSubmit={(values, { setSubmitting }) => {
+              const submitData = { ...values, rememberMe: checked };
+
+              loginMutation(submitData);
+              setSubmitting(false);
+            }}
           >
             {({
               errors,
               handleBlur,
               handleChange,
               handleSubmit,
+              isSubmitting,
               touched,
               values,
-              setFieldValue,
             }) => (
               <Form
                 noValidate
@@ -303,13 +331,21 @@ const AuthLogin = ({ ...others }) => {
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 8,
+                  gap: 16,
                 }}
               >
                 <FormControl
                   fullWidth
                   error={Boolean(touched.email && errors.email)}
-                  sx={{ ...theme.typography.customInput }}
+                  sx={{
+                    borderRadius: `${customization.borderRadius}px`,
+                    '& .MuiOutlinedInput-root': {
+                      bgcolor:
+                        customization.mode == 'light'
+                          ? theme.palette.grey[50]
+                          : theme.palette.grey[700],
+                    },
+                  }}
                 >
                   <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
                   <OutlinedInput
@@ -319,8 +355,8 @@ const AuthLogin = ({ ...others }) => {
                     name="email"
                     onBlur={handleBlur}
                     onChange={handleChange}
+                    placeholder="Enter email address"
                     label="Email Address"
-                    inputProps={{}}
                   />
                   {touched.email && errors.email && (
                     <FormHelperText error id="standard-weight-helper-text-email-login">
@@ -332,7 +368,15 @@ const AuthLogin = ({ ...others }) => {
                 <FormControl
                   fullWidth
                   error={Boolean(touched.password && errors.password)}
-                  sx={{ ...theme.typography.customInput }}
+                  sx={{
+                    borderRadius: `${customization.borderRadius}px`,
+                    '& .MuiOutlinedInput-root': {
+                      bgcolor:
+                        customization.mode == 'light'
+                          ? theme.palette.grey[50]
+                          : theme.palette.grey[700],
+                    },
+                  }}
                 >
                   <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
                   <OutlinedInput
@@ -355,8 +399,8 @@ const AuthLogin = ({ ...others }) => {
                         </IconButton>
                       </InputAdornment>
                     }
+                    placeholder="Enter password"
                     label="Password"
-                    inputProps={{}}
                   />
                   {touched.password && errors.password && (
                     <FormHelperText error id="standard-weight-helper-text-password-login">
@@ -364,6 +408,7 @@ const AuthLogin = ({ ...others }) => {
                     </FormHelperText>
                   )}
                 </FormControl>
+
                 <Stack
                   direction="row"
                   alignItems="center"
@@ -373,73 +418,48 @@ const AuthLogin = ({ ...others }) => {
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={values.rememberMe}
-                        onChange={(event) => {
-                          setFieldValue('rememberMe', event.target.checked);
-                          setChecked(event.target.checked);
-                        }}
+                        checked={checked}
+                        onChange={(event) => setChecked(event.target.checked)}
                         name="rememberMe"
                         color="primary"
                       />
                     }
-                    label={
-                      <span
-                        style={{
-                          color:
-                            customization.mode == 'light'
-                              ? theme.palette.grey[900]
-                              : theme.palette.grey[100],
-                        }}
-                      >
-                        Remember me
-                      </span>
-                    }
+                    label="Remember me"
                   />
-                  <Button
-                    // onClick={() => handdleModalOpen('forgotPasswordModal', true)}
-                    onClick={() => setForgotPassword(!forgotPassword)}
-                    sx={{ textDecoration: 'none', cursor: 'pointer', fontSize: 11 }}
+                  <Typography
+                    variant="subtitle1"
+                    color="secondary"
+                    sx={{
+                      textDecoration: 'none',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => setForgotPassword(true)}
+                    className="hover:text-underline"
                   >
                     Forgot Password?
-                  </Button>
+                  </Typography>
                 </Stack>
 
-                <Box sx={{ mt: 2 }}>
-                  <Button
-                    disableElevation
-                    disabled={isLoginLoading}
-                    fullWidth
-                    size="large"
-                    type="submit"
-                    variant="contained"
-                    color="secondary"
-                  >
-                    {isLoginLoading ? <GradientCircularProgress /> : 'Sign in'}
-                  </Button>
-                </Box>
+                {isLoginLoading ? (
+                  <GradientCircularProgress style={{ width: '100%', marginBottom: '1rem' }} />
+                ) : (
+                  <Box sx={{ mt: 2 }}>
+                    <Button
+                      disableElevation
+                      disabled={isSubmitting}
+                      fullWidth
+                      size="large"
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                    >
+                      Sign in
+                    </Button>
+                  </Box>
+                )}
               </Form>
             )}
           </Formik>
-
-          <Grid item xs={12}>
-            <Box margin={1} />
-            <Divider orientation="horizontal" />
-            <Box margin={1} />
-            <Grid item container direction="column" alignItems="center" xs={12}>
-              <Typography
-                className="hover:text-underline"
-                component={Link}
-                to="/auth/register"
-                variant="subtitle1"
-                sx={{ textDecoration: 'none' }}
-                color={
-                  customization.mode == 'light' ? theme.palette.grey[900] : theme.palette.grey[100]
-                }
-              >
-                Don&apos;t have an account?
-              </Typography>
-            </Grid>
-          </Grid>
         </>
       )}
     </>

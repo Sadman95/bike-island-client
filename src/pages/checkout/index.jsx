@@ -6,7 +6,7 @@ import CartTable from 'components/table/cart-table';
 import CheckoutForm from 'forms/checkout-form';
 
 // Initialize Stripe with your public key
-const stripePromise = loadStripe(stripePublishableKey);
+const stripePromise = loadStripe(`${stripePublishableKey}`);
 
 /**
  * =============================
