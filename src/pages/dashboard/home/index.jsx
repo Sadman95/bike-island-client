@@ -167,10 +167,10 @@ const Dashboard = ({ currentUser }) => {
       <Grid container spacing={2} my={1}>
         {isPending
           ? Array.from({ length: 4 }).map((_, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Skeleton variant="rectangular" height={140} />
-            </Grid>
-          ))
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <Skeleton variant="rectangular" height={140} />
+              </Grid>
+            ))
           : dashboardData &&
             Object.entries(dashboardData).map(([key, data]) => (
               <Grid item xs={12} sm={6} md={3} key={key}>
@@ -405,6 +405,12 @@ const Dashboard = ({ currentUser }) => {
                       ))}
                   </List>
                   <Button
+                    onClick={() => {
+                      navigate('/dashboard/manage-products', {
+                        replace: true,
+                        preventScrollReset: false,
+                      });
+                    }}
                     endIcon={<ArrowForward />}
                     sx={{ mt: 2, color: 'text.secondary', textTransform: 'none' }}
                   >
