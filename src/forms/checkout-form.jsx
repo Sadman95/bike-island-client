@@ -1,4 +1,14 @@
-import { Box, Button, Divider, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import {
+  Box,
+  Button,
+  Chip,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import {
   AddressElement,
   CardCvcElement,
@@ -7,7 +17,7 @@ import {
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
-import { useCreateOrder, usePaymentIntent } from 'api/hooks';
+import { useCreateOrder, useGetUserAddress, usePaymentIntent } from 'api/hooks';
 import Preloader from 'components/custom/Preloader';
 import { socket } from 'helpers/socket';
 import { useCartCalculation } from 'hooks/useCartCalculation';
@@ -20,6 +30,7 @@ import { clearAllFromCart } from 'redux/cart.reducer';
 import { selectCurrentCart, selectCurrentUser } from 'redux/selector';
 import { createStructuredSelector } from 'reselect';
 import swal from 'sweetalert';
+import { objectMapper } from 'utils/object-mapper';
 
 const CARD_ELEMENT_OPTIONS = {
   style: {
@@ -39,7 +50,6 @@ const CARD_ELEMENT_OPTIONS = {
 };
 
 const CheckoutForm = ({ cart, currentUser }) => {
-  
   const [address, setAddress] = useState({});
   const stripe = useStripe();
   const elements = useElements();
@@ -49,6 +59,23 @@ const CheckoutForm = ({ cart, currentUser }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [clientSecret, setClientSecret] = useState('');
+  const [addresses, setAddresses] = useState([]);
+  const [selectedId, setSelectedId] = useState('')
+
+  // Fetch addresses
+  const {
+    data: addressesData,
+    isPending: isAddresssPending,
+    isSuccess,
+    isError: isAddressError,
+    error: addressError,
+  } = useGetUserAddress(currentUser?.id);
+
+  useEffect(() => {
+    if (isSuccess && addressesData) {
+      setAddresses(addressesData.data);
+    }
+  }, [isSuccess, addressesData]);
 
   const { mutate: createPaymentIntent, isPending, isError, error, data } = usePaymentIntent();
   const {
@@ -74,19 +101,32 @@ const CheckoutForm = ({ cart, currentUser }) => {
 
   useEffect(() => {
     if (isOrderSuccess && orderData) {
-      
       swal('Well Done!', orderData.data.message, orderData.data.status);
       dispatch(clearAllFromCart());
       navigate('/dashboard/orders');
 
-      if(currentUser.id == orderData.data.data.user)
+      if (currentUser?.id === orderData.data.data.user) {
         socket.emit('new-order', orderData.data);
+      }
     }
-
-   
   }, [isOrderSuccess, orderData]);
 
+  // Handle address selection
+  const handleAddressSelect = (addressId) => {
+    const selectedAddress = addresses.find((address) => address._id === addressId);
+    const formattedAddress = objectMapper(selectedAddress, [
+      'city',
+      'country',
+      'line1',
+      'line2',
+      'postal_code',
+      'state',
+    ]);
+    setAddress({ ...address, ...formattedAddress });
+  };
+
   const handleAddressChange = (event) => {
+    setSelectedId('')
     setAddress(event.value.address);
   };
 
@@ -115,7 +155,10 @@ const CheckoutForm = ({ cart, currentUser }) => {
       });
 
       await createOrderMutation({
-        address,
+        address: {
+          ...address,
+          _id: selectedId
+        },
         items: cart.map((item) => ({
           product: item._id,
           quantity: item.quantity,
@@ -124,11 +167,16 @@ const CheckoutForm = ({ cart, currentUser }) => {
         totalAmount: invoiceTotal,
         paymentId: paymentIntent.payment_method,
       });
-
     } catch (err) {
       toast.error(err.message || 'Payment failed');
     }
   };
+
+  useEffect(() => {
+    if (selectedId) {
+      handleAddressSelect(selectedId);
+    }
+  }, [selectedId]);
 
   return (
     <Box sx={{ padding: isMobile ? 2 : 4 }}>
@@ -171,6 +219,19 @@ const CheckoutForm = ({ cart, currentUser }) => {
               Address
             </Typography>
             <Box sx={{ border: 1, borderRadius: 1, padding: 1, borderColor: 'grey.400' }}>
+              {addresses.length > 0 && (
+                <Stack direction="row" spacing={1} alignItems="center" flexWrap={'wrap'} mb={1}>
+                  {addresses.map((address, indx) => (
+                    <Chip
+                      color={selectedId == address._id ? 'success' : 'default'}
+                      key={address._id}
+                      label={`Address-${indx + 1}`}
+                      size="small"
+                      onClick={() => setSelectedId(address._id)}
+                    />
+                  ))}
+                </Stack>
+              )}
               <AddressElement
                 onChange={handleAddressChange}
                 options={{
@@ -178,7 +239,7 @@ const CheckoutForm = ({ cart, currentUser }) => {
                   mode: 'billing',
                   defaultValues: {
                     name: currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : null,
-                    address: address,
+                    address: {...address},
                   },
                 }}
               />

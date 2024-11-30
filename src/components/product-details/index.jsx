@@ -139,7 +139,6 @@ const ProductDetails = ({ productId }) => {
 
   // Check if the image has a background
   useEffect(() => {
-    console.log('hasBackground: ', hasBackground);
     if (_file) {
       const checkBackground = async () => {
         try {

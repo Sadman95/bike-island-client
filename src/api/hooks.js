@@ -323,6 +323,23 @@ export const useGetUserAddress = (param = '') =>
     select: (data) => data.data,
   });
 
+  export const useDeleteAddress = () =>
+    useMutation({
+      mutationKey: ['delete-address'],
+      mutationFn: (addressId = '') => agent2.User.DeleteAddress(addressId),
+      onSuccess: (data) => data.data,
+      onError: (error) => {
+        if (error.response.data.errorMessages.length > 0) {
+          error.response.data.errorMessages.map(({ message }) =>
+            setTimeout(() => {
+              toast.error(message, { position: 'bottom-center' });
+            }, 500),
+          );
+        } else {
+          toast.error(error.response.data.message, { position: 'top-right' });
+        }
+      },
+    });
 /**
  *
  * User API Hooks

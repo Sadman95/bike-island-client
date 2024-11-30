@@ -55,6 +55,7 @@ const requests = {
   patch: async (url, body) => await client.patch(url, body),
   patchProgress: async (url, body, getConfig) => await client.patch(url, body, getConfig),
   del: async (url) => await client.delete(url),
+  delProgress: async (url, config = null) => await client.delete(url, config),
   patchForm: async (url, values) => {
     const formData = new FormData();
     Object.keys(values).forEach((key) => {
@@ -91,9 +92,10 @@ const requests = {
 const User = {
   UpdateAccount: (id, info) => requests.patchForm(`/users/${id}`, info),
   LogOut: () => requests.post('/auth/logout'),
-  ChangePassword: (info) => requests.patchProgress('/auth/change-password', info, {
-    withCredentials: true
-  }),
+  ChangePassword: (info) =>
+    requests.patchProgress('/auth/change-password', info, {
+      withCredentials: true,
+    }),
   GetProile: () => requests.get('/users/profile'),
   GetUser: (id = '') => requests.get(`/users/${id}`),
   CreateOrder: (payload = null) =>
@@ -111,7 +113,7 @@ const User = {
   GetOrders: (queryParams = {}) => {
     const queryString = generateQueryString(queryParams);
     return requests.getProgress(`/orders/self?${queryString ?? ''}`, {
-      withCredentials: true
+      withCredentials: true,
     });
   },
   GetOrder: (orderId = '') => requests.get(`/orders/${orderId}`),
@@ -129,6 +131,9 @@ const User = {
     requests.get('/address', {
       withCredentials: true,
     }),
+  DeleteAddress: (addressId = '') => requests.delProgress(`/address/${addressId}`, {
+    withCredentials: true
+  } ),
 };
 
 const Payment = {
